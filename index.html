@@ -6,269 +6,8 @@
     <title>Plutus Hotel Revenue</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Raleway', sans-serif;
-            position: relative;
-            min-height: 100vh;
-        }
-
-        /* Fixed positioned layer for hero background - works reliably on iOS */
-        .hero::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #333;
-            background-image: url('index/heroback.webp');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: -1;
-        }
-
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-        }
-
-        .herotext {
-            position: relative;
-            z-index: 1;
-            padding: 2rem;
-            background: transparent;
-            opacity: 0;
-            transform: scale(1.5);
-            animation: shrinkIn 2.5s ease-out forwards;
-        }
-
-        .hero-logo {
-            width: 150px;
-            height: 150px;
-            margin-bottom: 1.5rem;
-        }
-
-        .herotext h1 {
-            font-size: 36px;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-
-        @keyframes shrinkIn {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .intro {
-            min-height: 600px;
-            background: #FFFFFF;
-            padding: 50px 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .introtitle {
-            margin: 50px 0;
-            font-size: 36px;
-            font-weight: 400;
-            color: #1C242C;
-        }
-
-        .introtext1,
-        .introtext2 {
-            font-size: 18px;
-            color: #1C242C;
-            line-height: 1.6;
-        }
-
-        .introtext1 {
-            max-width: 800px;
-        }
-
-        .intro-divider {
-            width: 50px;
-            border-top: 1px solid #D8C89D;
-            margin: 50px 0;
-        }
-
-        .introtext2 {
-            max-width: 700px;
-        }
-
-        .standardbutton {
-            padding: 12px 24px;
-            box-sizing: border-box;
-            border: 1px solid #D8C89D;
-            border-radius: 5px;
-            background: transparent;
-            color: #1C242C;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            margin-top: 50px;
-            white-space: nowrap;
-        }
-
-        .standardbutton:hover,
-        .standardbutton:focus {
-            background: #1C242C;
-            color: #FFFFFF;
-        }
-
-        .herobutton {
-            min-width: 170px;
-            padding: 12px 24px;
-            border: 1px solid #D8C89D;
-            border-radius: 5px;
-            background: rgba(28, 36, 44, 0.3);
-            color: #FFFFFF;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            margin-top: 50px;
-            white-space: nowrap;
-        }
-
-        .herobutton:hover,
-        .herobutton:focus {
-            background: #1C242C;
-            color: #FFFFFF;
-            border-color: rgba(216, 200, 157, 0.5);
-        }
-
-        .introconsulting {
-            min-height: 700px;
-            background: #1C242C;
-            padding: 50px 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .consulting-title {
-            font-size: 36px;
-            font-weight: 400;
-            color: #FFFFFF;
-            margin-bottom: 60px;
-            font-family: 'Raleway', sans-serif;
-        }
-
-        .consulting-cards {
-            width: 100%;
-            max-width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            padding: 0 20px;
-        }
-
-        .consulting-card {
-            min-width: 200px;
-            max-width: 280px;
-            height: 350px;
-            flex: 1 1 280px;
-            background: #2A3440;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 4px 4px 16px 2px #131920;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #FFFFFF;
-        }
-
-        .card-icon {
-            font-size: 60px;
-            color: #D8C89D;
-            margin-bottom: 20px;
-            line-height: 1;
-            font-family: 'Raleway', sans-serif;
-        }
-
-        .card-title {
-            font-size: 24px;
-            font-weight: 300;
-            margin: 20px 0;
-            text-align: center;
-            font-family: 'Raleway', sans-serif;
-        }
-
-        .card-text {
-            font-size: 16px;
-            line-height: 1.6;
-            text-align: center;
-            color: #FFFFFF;
-            font-family: 'Raleway', sans-serif;
-        }
-
-        /* Media query for better control of 2+2 breakpoint */
-        @media (max-width: 1200px) and (min-width: 601px) {
-            .consulting-card {
-                flex: 1 1 calc(50% - 30px);
-                max-width: calc(50% - 30px);
-            }
-        }
-
-        /* Single column on mobile */
-        @media (max-width: 600px) {
-            .consulting-card {
-                flex: 1 1 100%;
-                max-width: 400px;
-            }
-        }
-
-        .consulting-footer {
-            margin-top: 50px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .consulting-footer p {
-            font-size: 20px;
-            line-height: 1.6;
-            color: #FFFFFF;
-            max-width: 800px;
-            font-family: 'Raleway', sans-serif;
-        }
-
-        .consulting-button {
-            color: #FFFFFF;
-            border-color: #FFFFFF;
-        }
-
-        .consulting-button:hover,
-        .consulting-button:focus {
-            background: #FFFFFF;
-            color: #1C242C;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <section class="hero" aria-label="Hero banner">
@@ -319,6 +58,33 @@
             <p>Plutus Outsourced Revenue Management will be part of your team.<br>
             A relationship that is simple, informed and transparent.</p>
             <a class="herobutton" href="contact.html">GET IN TOUCH</a>
+        </div>
+    </section>
+    
+    <section class="services">
+        <div class="services-container">
+            <div class="service-card">
+                <img src="index/orv.webp" alt="Outsourced Revenue Management" class="service-image">
+                <h3 class="service-title">Outsourced Revenue Management</h3>
+                <p class="service-text">With expert outsourced revenue management service, all aspects of your revenue management will be handled for you. Will provide you with  bespoke day-to-day support  to achieve your goals freeing up time for you for other parts of your operation.</p>
+                <a href="#" class="standardbutton">LEARN MORE</a>
+            </div>
+            
+            <div class="service-card">
+                <img src="index/si.webp" alt="Software Information" class="service-image">
+                <h3 class="service-title">Software Information</h3>
+                <p class="service-text">There are various types of software available, each with its own set of features and functions. Take a look at some of the market leading ones.
+If needed will help you find the best suited for your business.</p>
+                <a href="#" class="standardbutton">LEARN MORE</a>
+            </div>
+            
+            <div class="service-card">
+                <img src="index/tai.webp" alt="Tips and Insights" class="service-image">
+                <h3 class="service-title">Tips and Insights</h3>
+                <p class="service-text">Discover expert tips on creating stunning hotel photoshoots that capture your property's best features.
+Find valuable insights on web design and digital marketing to boost your online presence and drive more bookings.</p>
+                <a href="#" class="standardbutton">LEARN MORE</a>
+            </div>
         </div>
     </section>
 </body>
