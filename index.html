@@ -157,6 +157,92 @@
             background: #1C242C;
             color: #FFFFFF;
         }
+
+        .introconsulting {
+            min-height: 700px;
+            background: #1C242C;
+            padding: 50px 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .consulting-title {
+            font-size: 36px;
+            font-weight: 400;
+            color: #FFFFFF;
+            margin-bottom: 60px;
+        }
+
+        .consulting-cards {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .consulting-card {
+            min-width: 200px;
+            max-width: 280px;
+            height: 350px;
+            background: #2A3440;
+            padding: 40px 30px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #FFFFFF;
+        }
+
+        .card-icon {
+            font-size: 60px;
+            color: #D8C89D;
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .card-text {
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: center;
+            color: #FFFFFF;
+        }
+
+        .consulting-footer {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .consulting-footer p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #FFFFFF;
+            max-width: 800px;
+        }
+
+        .consulting-button {
+            color: #FFFFFF;
+            border-color: #FFFFFF;
+        }
+
+        .consulting-button:hover,
+        .consulting-button:focus {
+            background: #FFFFFF;
+            color: #1C242C;
+        }
     </style>
 </head>
 <body>
@@ -173,6 +259,42 @@
         <div class="intro-divider" aria-hidden="true"></div>
         <p class="introtext2">With Plutus, hotels can streamline their revenue management processes and free up more time to be able to focus on their core operations.</p>
         <a class="standardbutton" href="contact.html">I'M INTERESTED</a>
+    </section>
+    
+    <section class="introconsulting">
+        <h2 class="consulting-title">Grow your hotel revenue via expert consulting</h2>
+        
+        <div class="consulting-cards">
+            <div class="consulting-card">
+                <div class="card-icon">&euro;</div>
+                <h3 class="card-title">Dinamic Pricing</h3>
+                <p class="card-text">Will Implement dynamic pricing strategies to balance occupancy and maximize revenue during peak and off-peak times.</p>
+            </div>
+            
+            <div class="consulting-card">
+                <div class="card-icon">&#x25D4;</div>
+                <h3 class="card-title">Demand Forecasting</h3>
+                <p class="card-text">With the use of advanced analytics, will predict demand trends that helps maniking data-driven decisions.</p>
+            </div>
+            
+            <div class="consulting-card">
+                <div class="card-icon">&#x21BB;</div>
+                <h3 class="card-title">Channel Management</h3>
+                <p class="card-text">Will optimize distribution across all channels to ensure reaching your target audience effectively</p>
+            </div>
+            
+            <div class="consulting-card">
+                <div class="card-icon">&#x1F4CA;</div>
+                <h3 class="card-title">Performance Analysis</h3>
+                <p class="card-text">Detailed daily, monthly and yearly reports will provide you a clear understanding of the hotel's performance and areas of improvement.</p>
+            </div>
+        </div>
+        
+        <div class="consulting-footer">
+            <p>Plutus Outsourced Revenue Management will be part of your team.<br>
+            A relationship that is simple, informed and transparent.</p>
+            <a class="standardbutton consulting-button" href="contact.html">GET IN TOUCH</a>
+        </div>
     </section>
 </body>
 </html>
