@@ -343,7 +343,7 @@ body {
     background-image: url('index/marketback.webp');
     background-attachment: fixed; /* Creates parallax effect */
     background-size: cover;
-    background-position: center;
+    background-position: center center;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
@@ -388,10 +388,10 @@ body {
 }
 
 .stat-number {
-    font-family: 'Raleway', sans-serif;
-    font-size: 48px;
+    font-family: Arial, sans-serif;
+    font-size: 36px;
     font-weight: 600;
-    color: #FFFFFF;
+    color: #D8C89D;
     margin-bottom: 20px;
 }
 
@@ -403,7 +403,7 @@ body {
 
 .stat-label {
     font-family: 'Raleway', sans-serif;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 400;
     color: #FFFFFF;
     text-transform: uppercase;
@@ -422,7 +422,11 @@ body {
     }
     
     .stat-number {
-        font-size: 36px;
+        font-size: 28px;
+    }
+    
+    .stat-label {
+        font-size: 16px;
     }
     
     .stats-container {
