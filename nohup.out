@@ -1,0 +1,4 @@
+127.0.0.1 - - [15/Feb/2026 11:16:52] "HEAD /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 11:16:55] "GET /index.html HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 11:16:55] "GET /logo/logo.png HTTP/1.1" 200 -
+127.0.0.1 - - [15/Feb/2026 11:16:55] "GET /index/heroback.webp HTTP/1.1" 200 -
