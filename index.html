@@ -117,6 +117,7 @@
             padding: 12px 24px;
             box-sizing: border-box;
             border: 1px solid #D8C89D;
+            border-radius: 5px;
             background: transparent;
             color: #1C242C;
             font-weight: 600;
@@ -128,7 +129,30 @@
             white-space: nowrap;
         }
 
-        .standardbutton:hover {
+        .standardbutton:hover,
+        .standardbutton:focus {
+            background: #1C242C;
+            color: #FFFFFF;
+        }
+
+        .herobutton {
+            min-width: 170px;
+            padding: 12px 24px;
+            border: 1px solid #D8C89D;
+            border-radius: 5px;
+            background: rgba(28, 36, 44, 0.3);
+            color: #FFFFFF;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            margin-top: 50px;
+            white-space: nowrap;
+        }
+
+        .herobutton:hover,
+        .herobutton:focus {
             background: #1C242C;
             color: #FFFFFF;
         }
@@ -139,6 +163,7 @@
         <div class="herotext">
             <img class="hero-logo" src="logo/logo.png" alt="Plutus Outsourced Hotel Revenue Management">
             <h1>OUTSOURCED<br>HOTEL REVENUE MANAGEMENT</h1>
+            <a class="herobutton" href="contact.html">GET IN TOUCH</a>
         </div>
     </section>
     <section class="intro">
