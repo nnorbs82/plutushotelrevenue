@@ -298,6 +298,9 @@ body {
     font-weight: 700; /* Bold */
     color: #1C242C;
     margin-bottom: 15px;
+    min-height: 60px; /* Fixed height for 2 lines (24px × 2 + some spacing) */
+    display: flex;
+    align-items: flex-start;
 }
 
 .service-text {
