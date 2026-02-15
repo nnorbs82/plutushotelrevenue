@@ -224,19 +224,20 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
-/* Media query for better control of 2+2 breakpoint */
-@media (max-width: 1200px) and (min-width: 601px) {
+/* Tablet: force 2x2 layout */
+@media (max-width: 1000px) and (min-width: 600px) {
     .consulting-card {
         flex: 1 1 calc(50% - 30px);
         max-width: calc(50% - 30px);
+        min-width: 250px;
     }
 }
 
-/* Single column on mobile */
-@media (max-width: 600px) {
+/* Mobile: stack vertically */
+@media (max-width: 599px) {
     .consulting-card {
         flex: 1 1 100%;
-        max-width: 400px;
+        max-width: 100%;
     }
 }
 
@@ -332,5 +333,99 @@ body {
     .service-card {
         flex: 1 1 100%;
         max-width: 100%;
+    }
+}
+
+/* Results & Market Experience Section with Parallax */
+.results-market {
+    position: relative;
+    min-height: 600px;
+    background-image: url('index/marketback.webp');
+    background-attachment: fixed; /* Creates parallax effect */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.results-overlay {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 80px 2rem;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay for readability */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.results-title {
+    font-family: 'Raleway', sans-serif;
+    font-size: 42px;
+    font-weight: 400;
+    color: #FFFFFF;
+    margin-bottom: 80px;
+}
+
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 60px;
+    max-width: 1200px;
+    margin-bottom: 60px;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 200px;
+    flex: 1 1 200px;
+}
+
+.stat-number {
+    font-family: 'Raleway', sans-serif;
+    font-size: 48px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+}
+
+.stat-divider {
+    width: 50px;
+    border-top: 2px solid #D8C89D;
+    margin-bottom: 20px;
+}
+
+.stat-label {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.6;
+}
+
+/* Mobile: disable parallax for better performance */
+@media (max-width: 768px) {
+    .results-market {
+        background-attachment: scroll;
+    }
+    
+    .results-title {
+        font-size: 32px;
+    }
+    
+    .stat-number {
+        font-size: 36px;
+    }
+    
+    .stats-container {
+        gap: 40px;
     }
 }
