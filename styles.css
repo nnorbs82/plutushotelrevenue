@@ -65,6 +65,13 @@ body {
     }
 }
 
+/* Mobile hero background */
+@media (max-width: 600px) {
+    .hero::before {
+        background-image: url('index/heromobileback.webp');
+    }
+}
+
 .intro {
     min-height: 600px;
     background: #FFFFFF;
