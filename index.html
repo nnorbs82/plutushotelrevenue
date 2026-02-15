@@ -178,18 +178,20 @@
         }
 
         .consulting-cards {
+            width: 100%;
+            max-width: 100%;
             display: flex;
-            justify-content: center;
-            gap: 35px;
             flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
+            justify-content: center;
+            gap: 30px;
+            padding: 0 20px;
         }
 
         .consulting-card {
             min-width: 200px;
             max-width: 280px;
             height: 350px;
+            flex: 1 1 280px;
             background: #2A3440;
             padding: 40px 30px;
             border-radius: 5px;
@@ -221,6 +223,22 @@
             text-align: center;
             color: #FFFFFF;
             font-family: 'Raleway', sans-serif;
+        }
+
+        /* Media query for better control of 2+2 breakpoint */
+        @media (max-width: 1200px) and (min-width: 601px) {
+            .consulting-card {
+                flex: 1 1 calc(50% - 30px);
+                max-width: calc(50% - 30px);
+            }
+        }
+
+        /* Single column on mobile */
+        @media (max-width: 600px) {
+            .consulting-card {
+                flex: 1 1 100%;
+                max-width: 400px;
+            }
         }
 
         .consulting-footer {
