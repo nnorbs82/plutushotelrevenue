@@ -90,12 +90,11 @@ body {
     }
     
     .nav-links {
-        gap: 1rem;
-        font-size: 12px;
+        gap: 0.8rem;
     }
     
     .nav-links a {
-        font-size: 12px;
+        font-size: 11px;
     }
     
     .nav-links a.contact-button {
@@ -104,8 +103,26 @@ body {
 }
 
 @media (max-width: 600px) {
+    .nav-menu {
+        padding: 0 0.5rem;
+    }
+    
+    .nav-logo {
+        height: 50px;
+        width: 50px;
+    }
+    
     .nav-links {
-        display: none; /* Hide links on very small screens - would need hamburger menu */
+        gap: 0.5rem;
+    }
+    
+    .nav-links a {
+        font-size: 9px;
+        letter-spacing: 0.3px;
+    }
+    
+    .nav-links a.contact-button {
+        padding: 6px 10px;
     }
 }
 
