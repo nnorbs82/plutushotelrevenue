@@ -10,6 +10,122 @@ body {
     min-height: 100vh;
 }
 
+/* Navigation Menu Styles */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    z-index: 1000;
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
+    background: transparent;
+}
+
+.nav-menu.scrolled {
+    background-color: #1C242C;
+    box-shadow: 0 1px 24px 1px #11161B;
+}
+
+.nav-logo {
+    height: 60px;
+    width: 60px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #1C242C;
+    transition: color 0.5s ease;
+    letter-spacing: 0.5px;
+}
+
+.nav-menu.scrolled .nav-links a {
+    color: #FFFFFF;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+.nav-links a.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.nav-links a.contact-button {
+    padding: 10px 20px;
+    border: 1px solid #D8C89D;
+    border-radius: 5px;
+    background: transparent;
+    transition: background-color 0.3s ease, color 0.5s ease;
+}
+
+.nav-links a.contact-button:hover {
+    background-color: rgba(216, 200, 157, 0.2);
+    opacity: 1;
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+    .nav-menu {
+        padding: 0 1rem;
+    }
+    
+    .nav-links {
+        gap: 0.8rem;
+    }
+    
+    .nav-links a {
+        font-size: 11px;
+    }
+    
+    .nav-links a.contact-button {
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-menu {
+        padding: 0 0.5rem;
+    }
+    
+    .nav-logo {
+        height: 50px;
+        width: 50px;
+    }
+    
+    .nav-links {
+        gap: 0.5rem;
+    }
+    
+    .nav-links a {
+        font-size: 9px;
+        letter-spacing: 0.3px;
+    }
+    
+    .nav-links a.contact-button {
+        padding: 6px 10px;
+    }
+}
+
 /* Fixed positioned layer for hero background - works reliably on iOS */
 .hero::before {
     content: '';
