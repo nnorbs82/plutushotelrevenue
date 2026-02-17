@@ -58,6 +58,7 @@ body {
 
 .nav-menu.scrolled .nav-links a {
     color: #FFFFFF;
+    font-weight: 300;
 }
 
 .nav-links a:hover {
