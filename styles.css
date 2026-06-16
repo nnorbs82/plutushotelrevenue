@@ -558,7 +558,6 @@ body {
 }
 
 .revenue-page .nav-menu {
-    padding: 0 24px;
     background: transparent;
 }
 
@@ -568,13 +567,7 @@ body {
 
 .revenue-page .nav-links a {
     color: #FFFFFF;
-    font-size: 15px;
-    font-weight: 500;
-}
-
-.revenue-page .nav-links a.contact-button {
-    font-size: 14px;
-    font-weight: 600;
+    font-weight: 300;
 }
 
 .material-symbols-outlined {
@@ -1081,15 +1074,6 @@ body {
 }
 
 @media (max-width: 600px) {
-    .revenue-page .nav-menu {
-        padding: 0 0.5rem;
-    }
-
-    .revenue-page .nav-links a {
-        font-size: 9px;
-        letter-spacing: 0.3px;
-    }
-
     .orm-hero h1 {
         width: calc(100% - 40px);
         max-width: 350px;
