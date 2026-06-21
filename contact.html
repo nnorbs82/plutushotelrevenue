@@ -7,9 +7,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260621-no-white-flash">
+    <link rel="stylesheet" href="styles.css?v=20260621-contact-page">
 </head>
-<body>
+<body class="contact-page">
     <nav class="nav-menu">
         <a href="index.html">
             <img src="logo/logo.png" alt="Plutus Hotel Revenue" class="nav-logo">
@@ -38,6 +38,133 @@
             <li><a href="contact.html" class="contact-button">CONTACT</a></li>
         </ul>
     </nav>
-    <script src="navigation.js?v=20260621-no-white-flash"></script>
+
+    <div class="contact-fixed-background" aria-hidden="true"></div>
+
+    <main class="contact-main">
+        <section class="contact-hero" aria-labelledby="contact-page-title">
+            <h1 id="contact-page-title">CONTACT</h1>
+        </section>
+
+        <section class="contact-details" aria-label="Contact details and form">
+            <div class="contact-grid">
+                <div class="contact-information">
+                    <h2>Get in Touch</h2>
+                    <p class="contact-mission">Our mission is to provide you with straightforward, simple and most affordable outsourced revenue management and consulting.</p>
+                    <div class="contact-rule" aria-hidden="true"></div>
+
+                    <div class="contact-features">
+                        <div class="contact-feature">
+                            <span class="contact-feature-icon contact-check-icon" aria-hidden="true">&#10003;</span>
+                            <span>Will respond within 24Hrs</span>
+                        </div>
+
+                        <a class="contact-feature" href="https://www.linkedin.com/company/plutushotelrevenue/" target="_blank" rel="noopener noreferrer">
+                            <svg class="contact-feature-icon contact-social-icon" viewBox="0 0 28 32" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M4.32 25.776h4.211V13.125h-4.21zM8.805 9.224q-.019-.948-.657-1.568t-1.695-.62-1.723.62-.665 1.568q0 .93.647 1.559t1.686.628h.019q1.075 0 1.731-.628t.657-1.559m10.664 16.552h4.21v-7.255q0-2.807-1.33-4.248t-3.518-1.44q-2.48 0-3.81 2.133h.036v-1.841h-4.21q.054 1.203 0 12.651h4.21v-7.073q0-.693.128-1.02.273-.639.82-1.085t1.35-.447q2.114 0 2.114 2.862zM28 7.583v17.5q0 2.17-1.54 3.71t-3.71 1.54H5.25q-2.17 0-3.71-1.54T0 25.083v-17.5q0-2.169 1.54-3.71t3.71-1.54h17.5q2.17 0 3.71 1.54T28 7.584"/>
+                            </svg>
+                            <span>Find us on LinkedIn</span>
+                        </a>
+
+                        <a class="contact-feature" href="https://www.facebook.com/plutushotelrevenue/" target="_blank" rel="noopener noreferrer">
+                            <svg class="contact-feature-icon contact-social-icon" viewBox="0 0 28 32" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M22.75 2.333q2.17 0 3.71 1.54T28 7.584v17.5q0 2.17-1.54 3.71t-3.71 1.54h-3.427V19.487h3.628l.546-4.23h-4.174V12.56q0-1.02.428-1.531t1.668-.51l2.224-.019V6.727q-1.148-.165-3.245-.165-2.479 0-3.964 1.459t-1.486 4.12v3.117h-3.646v4.229h3.646v10.846H5.25q-2.17 0-3.71-1.54T0 25.083v-17.5q0-2.169 1.54-3.71t3.71-1.54z"/>
+                            </svg>
+                            <span>Find us on Facebook</span>
+                        </a>
+                    </div>
+
+                    <div class="contact-rule contact-location-rule" aria-hidden="true"></div>
+                    <h2 class="contact-location-title">Location</h2>
+                    <p class="contact-location">Barcelona, Spain</p>
+                </div>
+
+                <div class="contact-form-panel">
+                    <h2>Contact Form</h2>
+                    <form class="contact-form" action="https://formsubmit.co/norbert.nica@plutushotelrevenue.com" method="post" data-endpoint="https://formsubmit.co/ajax/norbert.nica@plutushotelrevenue.com">
+                        <input type="hidden" name="_subject" value="New enquiry from the Plutus website">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_url" value="https://plutushotelrevenue.com/contact.html">
+                        <input class="contact-honeypot" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" hidden>
+
+                        <label>
+                            <span>Name</span>
+                            <input type="text" name="name" placeholder="Name..." autocomplete="name" required>
+                        </label>
+
+                        <label>
+                            <span>Email</span>
+                            <input type="email" name="email" placeholder="Email..." autocomplete="email" required>
+                        </label>
+
+                        <label>
+                            <span>Message</span>
+                            <textarea name="message" placeholder="Message..." required></textarea>
+                        </label>
+
+                        <div class="contact-submit-row">
+                            <button type="submit">SUBMIT</button>
+                            <p class="contact-form-status" role="status" aria-live="polite"></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="logo/logo.png" alt="Plutus Hotel Revenue" class="footer-logo">
+                    <div class="footer-socials" aria-label="Social media links">
+                        <a href="https://www.facebook.com/plutushotelrevenue/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <svg viewBox="0 0 19 32" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M17.794.223V5.12H14.88q-1.596 0-2.152.668t-.557 2.004V11.3h5.436l-.723 5.492h-4.713v14.083H6.494V16.792H1.763V11.3h4.731V7.255q0-3.451 1.93-5.353T13.564 0q2.727 0 4.23.223"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.linkedin.com/company/plutushotelrevenue/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                            <svg viewBox="0 0 28 32" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M6.362 11.393v18.065H.346V11.393zm.383-5.578q.018 1.33-.92 2.224t-2.47.893h-.037q-1.495 0-2.407-.893T0 5.815q0-1.349.939-2.233t2.452-.884 2.424.884.93 2.233M28 19.105v10.353h-5.997v-9.661q0-1.914-.739-2.999t-2.306-1.084q-1.148 0-1.923.628t-1.157 1.559q-.2.547-.2 1.477v10.08H9.68q.036-7.273.036-11.794t-.018-5.396l-.018-.875h5.997v2.625h-.036q.364-.583.747-1.02t1.03-.949 1.586-.792 2.087-.283q3.117 0 5.013 2.069T28 19.104"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h2>Company</h2>
+                    <a href="about.html">About</a>
+                    <a href="revenue_management.html">Revenue Management</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+
+                <div class="footer-column">
+                    <h2>Software</h2>
+                    <a href="cloudbeds_pms.html">Cloudbeds</a>
+                    <a href="mews_pms.html">Mews</a>
+                    <a href="siteminder_chm.html">Siteminder</a>
+                </div>
+
+                <div class="footer-column">
+                    <h2>Tips</h2>
+                    <a href="hotel_photoshoot_tips.html">Hotel Photoshoot</a>
+                    <a href="web_design_tips.html">Web Design</a>
+                    <a href="digital_marketing_tips.html">Digital Marketing</a>
+                </div>
+
+                <div class="footer-column">
+                    <h2>Legal</h2>
+                    <a href="privacy_policy.html">Privacy Policy</a>
+                    <a href="terms_and_conditions.html">Terms</a>
+                </div>
+            </div>
+
+            <div class="footer-divider" aria-hidden="true"></div>
+            <p class="footer-copyright">&copy; 2024 All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="navigation.js?v=20260621-contact-form-fix"></script>
 </body>
 </html>

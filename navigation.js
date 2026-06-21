@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let scrollTicking = false;
     let navigationInProgress = false;
     let softwareParallaxCleanup = null;
+    let contactFormCleanup = null;
 
     function updateNavOnScroll() {
         navMenu.classList.toggle('scrolled', window.scrollY > 40);
@@ -85,6 +86,91 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    function initializeContactForm() {
+        if (contactFormCleanup) {
+            contactFormCleanup();
+            contactFormCleanup = null;
+        }
+
+        const form = document.querySelector('.contact-form');
+        if (!form) return;
+
+        const submitButton = form.querySelector('button[type="submit"]');
+        const status = form.querySelector('.contact-form-status');
+
+        function setStatus(message, state) {
+            if (!status) return;
+
+            status.textContent = message;
+            if (state) {
+                status.dataset.state = state;
+            } else {
+                delete status.dataset.state;
+            }
+        }
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            if (!form.dataset.endpoint) {
+                setStatus('Unable to send. Please try again.', 'error');
+                return;
+            }
+
+            const formData = new FormData(form);
+            const payload = Object.fromEntries(formData.entries());
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'SENDING...';
+            setStatus('', '');
+
+            try {
+                const response = await window.fetch(form.dataset.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json().catch(function() {
+                    return {};
+                });
+
+                if (!response.ok || result.success === false || result.success === 'false') {
+                    throw new Error(result.message || 'Contact form submission failed');
+                }
+
+                form.reset();
+                setStatus('Message Sent!', 'success');
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : '';
+                const needsActivation = /activat|confirm|unable to submit form|failed to fetch/i.test(errorMessage);
+
+                if (needsActivation) {
+                    setStatus('Check your inbox for the FormSubmit activation email, then try again.', 'error');
+                } else {
+                    setStatus('Unable to send. Please try again.', 'error');
+                }
+
+                console.error('Contact form submission failed:', errorMessage);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'SUBMIT';
+            }
+        }
+
+        form.addEventListener('submit', handleSubmit);
+        contactFormCleanup = function() {
+            form.removeEventListener('submit', handleSubmit);
+        };
+    }
+
     async function ensurePageStyles(targetDocument, targetUrl) {
         const loadedStyles = new Set(
             Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(function(link) {
@@ -158,6 +244,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 softwareParallaxCleanup = null;
             }
 
+            if (contactFormCleanup) {
+                contactFormCleanup();
+                contactFormCleanup = null;
+            }
+
             const pageContent = importPageContent(targetDocument);
             removeCurrentPageContent();
 
@@ -172,6 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
             updateNavOnScroll();
             initializeSoftwareParallax();
+            initializeContactForm();
 
             document.dispatchEvent(new CustomEvent('site:pagechange', {
                 detail: { url: targetUrl.href }
@@ -242,5 +334,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initializeDropdowns();
     initializeSoftwareParallax();
+    initializeContactForm();
     updateNavOnScroll();
 });
