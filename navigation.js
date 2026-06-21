@@ -85,12 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    function wait(duration) {
-        return new Promise(function(resolve) {
-            window.setTimeout(resolve, duration);
-        });
-    }
-
     async function ensurePageStyles(targetDocument, targetUrl) {
         const loadedStyles = new Set(
             Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(function(link) {
@@ -159,9 +153,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             await ensurePageStyles(targetDocument, targetUrl);
 
-            document.body.classList.add('site-content-leaving');
-            await wait(130);
-
             if (softwareParallaxCleanup) {
                 softwareParallaxCleanup();
                 softwareParallaxCleanup = null;
@@ -171,7 +162,6 @@ document.addEventListener('DOMContentLoaded', function() {
             removeCurrentPageContent();
 
             document.body.className = targetDocument.body.className;
-            document.body.classList.add('site-content-entering');
             document.body.appendChild(pageContent);
             document.title = targetDocument.title;
 
@@ -182,12 +172,6 @@ document.addEventListener('DOMContentLoaded', function() {
             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
             updateNavOnScroll();
             initializeSoftwareParallax();
-
-            window.requestAnimationFrame(function() {
-                window.requestAnimationFrame(function() {
-                    document.body.classList.remove('site-content-entering');
-                });
-            });
 
             document.dispatchEvent(new CustomEvent('site:pagechange', {
                 detail: { url: targetUrl.href }

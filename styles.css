@@ -6,33 +6,13 @@
 
 html {
     scrollbar-gutter: stable;
+    background-color: #1C242C;
 }
 
 body {
     font-family: 'Raleway', sans-serif;
     position: relative;
     min-height: 100vh;
-}
-
-body > :not(.nav-menu):not(script) {
-    opacity: 1;
-    transition: opacity 0.18s ease;
-}
-
-body.site-content-leaving > :not(.nav-menu):not(script),
-body.site-content-entering > :not(.nav-menu):not(script) {
-    opacity: 0;
-    pointer-events: none;
-}
-
-body.site-content-leaving {
-    overflow: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    body > :not(.nav-menu):not(script) {
-        transition-duration: 0.01ms;
-    }
 }
 
 /* Navigation Menu Styles */
