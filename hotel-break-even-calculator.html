@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Free Hotel Break-even Calculator | Plutus</title>
-  <meta name="description" content="Calculate hotel break-even occupancy, occupied room nights, contribution per room, target-profit occupancy and required ADR with an interactive graph.">
+  <meta name="description" content="A straightforward hotel break-even calculator for occupancy, occupied room nights, contribution and target profit.">
   <meta name="theme-color" content="#1C242C">
   <link rel="icon" href="logo/logo.png" type="image/png">
   <link rel="canonical" href="https://plutushotelrevenue.com/hotel-break-even-calculator.html">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Free Hotel Break-even Calculator | Plutus">
-  <meta property="og:description" content="Calculate hotel break-even occupancy, occupied room nights, contribution per room, target-profit occupancy and required ADR with an interactive graph.">
+  <meta property="og:description" content="Enter the basic numbers you already know and see the occupancy your hotel needs to cover its costs.">
   <meta property="og:url" content="https://plutushotelrevenue.com/hotel-break-even-calculator.html">
   <meta property="og:image" content="https://plutushotelrevenue.com/index/heroback.webp">
   <meta name="twitter:card" content="summary_large_image">
@@ -21,17 +21,202 @@
   <link rel="stylesheet" href="plutus-v2.css?v=20260902b">
   <link rel="stylesheet" href="plutus-v3.css?v=20260902c">
   <script defer src="navigation.js?v=20260902b"></script>
-  <script defer src="calculator.js?v=20260902"></script>
+  <script defer src="calculator.js?v=20260902c"></script>
 </head>
-<body class="calculator-page" data-page="calculator"><a class="skip-link" href="#main-content">Skip to content</a><div data-site-header></div><main id="main-content">
-<section class="calculator-hero"><div class="calculator-hero-pattern" aria-hidden="true"></div><div class="shell calculator-hero-grid"><div data-reveal><p class="eyebrow eyebrow-light"><span></span> Free hotel tool</p><h1>Hotel break-even calculator.</h1><p>See the occupancy, room nights and revenue your property needs to cover costs - then model a target profit scenario.</p><div class="calculator-trust"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> No account</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> No upload</span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg> Runs in your browser</span></div></div><aside class="calculator-hero-note" data-reveal><p>Before you start</p><strong>Use net figures excluding VAT or sales tax.</strong><span>Match every fixed cost to the period below. Variable costs should be the additional cost caused by one occupied room.</span></aside></div></section>
-<section class="calculator-workspace" data-calculator><div class="shell calculator-layout"><form class="calculator-form" id="breakEvenForm" novalidate><div class="calculator-form-heading"><div><p class="section-kicker">Your assumptions</p><h2>Build the hotel model</h2></div><button type="button" class="quiet-button" data-reset-calculator>Reset example</button></div><p class="calculator-privacy-note">Your entries stay on this device and are saved only in this browser.</p>
-<fieldset class="input-group"><legend><span>01</span> Property and scenario</legend><div class="input-grid input-grid-3"><label><span>Currency</span><select id="currency" name="currency"><option value="EUR">EUR - €</option><option value="GBP">GBP - £</option><option value="USD">USD - $</option><option value="CHF">CHF</option><option value="RON">RON</option><option value="CAD">CAD - $</option><option value="AUD">AUD - $</option></select></label><label><span>Total rooms</span><input id="rooms" name="rooms" type="number" min="1" step="1" value="66"><small>Physical rooms in the hotel</small></label><label><span>Days in period</span><input id="days" name="days" type="number" min="1" max="366" step="1" value="30"><small>For example, 30 or 365</small></label><label><span>Average rooms out of order</span><input id="outOfOrder" name="outOfOrder" type="number" min="0" step="0.1" value="0"><small>Unavailable rooms per day</small></label><label><span>Current / expected occupancy</span><div class="percent-input"><input id="currentOccupancy" name="currentOccupancy" type="number" min="0" max="100" step="0.1" value="68"><b>%</b></div><small>Used for the current scenario</small></label><label><span>Target profit for period</span><div class="money-input"><b data-currency-symbol>€</b><input id="targetProfit" name="targetProfit" type="number" min="0" step="100" value="10000"></div><small>Enter 0 for pure break-even</small></label></div></fieldset>
-<fieldset class="input-group"><legend><span>02</span> Revenue per occupied room</legend><div class="input-grid input-grid-2"><label><span>Average room rate - ADR</span><div class="money-input"><b data-currency-symbol>€</b><input id="adr" name="adr" type="number" min="0" step="0.01" value="135"></div><small>Room revenue excluding VAT</small></label><label><span>Other revenue per occupied room</span><div class="money-input"><b data-currency-symbol>€</b><input id="ancillaryRevenue" name="ancillaryRevenue" type="number" min="0" step="0.01" value="18"></div><small>Breakfast, parking, F&amp;B, upsells, etc.</small></label></div></fieldset>
-<fieldset class="input-group"><legend><span>03</span> Distribution and revenue-based costs</legend><div class="input-grid input-grid-2"><label><span>OTA share of room revenue</span><div class="percent-input"><input id="otaShare" name="otaShare" type="number" min="0" max="100" step="0.1" value="55"><b>%</b></div><small>Share sold through commission channels</small></label><label><span>Average OTA commission</span><div class="percent-input"><input id="otaCommission" name="otaCommission" type="number" min="0" max="100" step="0.1" value="17"><b>%</b></div><small>Applied only to the OTA room-revenue share</small></label><label><span>Payment / merchant fee</span><div class="percent-input"><input id="paymentFee" name="paymentFee" type="number" min="0" max="100" step="0.1" value="1.5"><b>%</b></div><small>Applied to room and other revenue</small></label><label><span>Other revenue-based fee</span><div class="percent-input"><input id="revenueFee" name="revenueFee" type="number" min="0" max="100" step="0.1" value="0"><b>%</b></div><small>Franchise, management or similar fee</small></label></div></fieldset>
-<fieldset class="input-group"><legend><span>04</span> Variable costs per occupied room</legend><p class="group-help">Enter only costs that increase when a room is occupied. Base staffing and minimum utility consumption belong under fixed costs.</p><div class="input-grid input-grid-2"><label><span>Housekeeping labour</span><div class="money-input"><b data-currency-symbol>€</b><input id="housekeeping" name="housekeeping" type="number" min="0" step="0.01" value="8"></div></label><label><span>Linen and laundry</span><div class="money-input"><b data-currency-symbol>€</b><input id="linen" name="linen" type="number" min="0" step="0.01" value="3.5"></div></label><label><span>Guest amenities</span><div class="money-input"><b data-currency-symbol>€</b><input id="amenities" name="amenities" type="number" min="0" step="0.01" value="1.5"></div></label><label><span>Variable utilities</span><div class="money-input"><b data-currency-symbol>€</b><input id="variableUtilities" name="variableUtilities" type="number" min="0" step="0.01" value="3.7"></div></label><label><span>Breakfast / included F&amp;B cost</span><div class="money-input"><b data-currency-symbol>€</b><input id="breakfastCost" name="breakfastCost" type="number" min="0" step="0.01" value="7"></div></label><label><span>Other occupied-room cost</span><div class="money-input"><b data-currency-symbol>€</b><input id="otherVariable" name="otherVariable" type="number" min="0" step="0.01" value="1.3"></div></label></div></fieldset>
-<fieldset class="input-group"><legend><span>05</span> Fixed costs for the period</legend><p class="group-help">These costs exist even at very low occupancy. Use the same period as the number of days above.</p><div class="input-grid input-grid-2"><label><span>Base payroll and salaries</span><div class="money-input"><b data-currency-symbol>€</b><input id="payroll" name="payroll" type="number" min="0" step="100" value="65000"></div></label><label><span>Rent, lease or mortgage</span><div class="money-input"><b data-currency-symbol>€</b><input id="rent" name="rent" type="number" min="0" step="100" value="18000"></div></label><label><span>Base utilities</span><div class="money-input"><b data-currency-symbol>€</b><input id="fixedUtilities" name="fixedUtilities" type="number" min="0" step="100" value="7500"></div></label><label><span>Insurance, licences and property taxes</span><div class="money-input"><b data-currency-symbol>€</b><input id="insurance" name="insurance" type="number" min="0" step="100" value="5000"></div></label><label><span>PMS, software and subscriptions</span><div class="money-input"><b data-currency-symbol>€</b><input id="technology" name="technology" type="number" min="0" step="100" value="3500"></div></label><label><span>Maintenance and contracts</span><div class="money-input"><b data-currency-symbol>€</b><input id="maintenance" name="maintenance" type="number" min="0" step="100" value="4500"></div></label><label><span>Sales, marketing and administration</span><div class="money-input"><b data-currency-symbol>€</b><input id="salesAdmin" name="salesAdmin" type="number" min="0" step="100" value="5500"></div></label><label><span>Other fixed costs</span><div class="money-input"><b data-currency-symbol>€</b><input id="otherFixed" name="otherFixed" type="number" min="0" step="100" value="3000"></div></label></div></fieldset><div class="form-error" data-calculator-error role="alert" hidden></div></form>
-<section class="calculator-results" aria-live="polite"><div class="results-toolbar"><div><p class="section-kicker section-kicker-light">Live results</p><span>Updates as you type</span></div><div><button type="button" class="icon-button" data-copy-summary>Copy</button><button type="button" class="icon-button" data-print-results>Print</button></div></div><div class="result-hero-card"><span>Break-even occupancy</span><strong data-result="breakEvenOccupancy">-</strong><small data-result="breakEvenNarrative">Complete the assumptions to calculate.</small><div class="result-meter"><i data-break-even-meter></i><b data-current-marker title="Current occupancy"></b></div><div class="meter-labels"><span>0%</span><span>100%</span></div></div><div class="result-card-grid"><article><span>Break-even room nights</span><strong data-result="breakEvenNights">-</strong><small data-result="roomsPerDay">-</small></article><article><span>Contribution per occupied room</span><strong data-result="contributionPerRoom">-</strong><small>After variable and revenue-based costs</small></article><article><span>Target-profit occupancy</span><strong data-result="targetOccupancy">-</strong><small data-result="targetNarrative">-</small></article><article><span>Projected result at current occupancy</span><strong data-result="currentProfit">-</strong><small data-result="currentMargin">-</small></article><article><span>Revenue at break-even</span><strong data-result="breakEvenRevenue">-</strong><small data-result="breakEvenRevpar">-</small></article><article><span>ADR required at current occupancy</span><strong data-result="requiredAdr">-</strong><small>To reach the target profit entered</small></article></div><div class="chart-card"><div class="chart-heading"><div><span>Revenue and cost curve</span><strong data-chart-title>Across 0% - 100% occupancy</strong></div><div class="chart-legend"><span><i class="legend-revenue"></i>Revenue</span><span><i class="legend-cost"></i>Total costs</span></div></div><div class="chart-wrap"><svg id="breakEvenChart" viewBox="0 0 760 390" role="img" aria-labelledby="chartTitle chartDescription"><title id="chartTitle">Hotel revenue and total cost by occupancy</title><desc id="chartDescription">Line chart showing revenue and total costs from zero to one hundred percent occupancy.</desc></svg></div></div><div class="scenario-grid"><article class="scenario-card"><div class="scenario-donut" data-cost-donut><span data-result="costMixPercent">-</span></div><div><span>Cost mix at current occupancy</span><p data-result="costMixNarrative">-</p></div></article><article class="scenario-card scenario-card-text"><span>What the model says</span><p data-result="interpretation">Enter your assumptions to see an interpretation.</p></article></div><p class="calculator-disclaimer">This is a management planning tool, not accounting, tax or investment advice. Results depend entirely on the assumptions entered.</p></section></div></section>
-<section class="section calculator-explainer"><div class="shell"><div class="section-heading-row" data-reveal><div><p class="section-kicker">How it works</p><h2>The logic behind the result.</h2></div><p>Break-even is reached when the contribution generated by occupied rooms covers the hotel's fixed costs.</p></div><div class="formula-grid"><article data-reveal><span>1</span><h3>Available room nights</h3><p>(Total rooms - rooms out of order) × days in period</p></article><article data-reveal><span>2</span><h3>Contribution per occupied room</h3><p>Room and other revenue - occupied-room costs - weighted distribution and payment costs</p></article><article data-reveal><span>3</span><h3>Break-even occupancy</h3><p>Fixed costs ÷ contribution per room ÷ available room nights</p></article></div></div></section>
-<section class="section calculator-faq faq-section"><div class="shell faq-grid"><div data-reveal><p class="section-kicker">Calculator questions</p><h2>Classify costs carefully.</h2><p>The biggest errors usually come from mixing fixed and variable costs or entering gross revenue with tax included.</p></div><div class="faq-list" data-reveal><details><summary>Where should electricity, gas and water go?<span></span></summary><p>Split them. Base consumption that exists regardless of occupancy is fixed. Additional consumption caused by occupied rooms is variable per occupied room.</p></details><details><summary>What is the difference between fixed payroll and housekeeping labour?<span></span></summary><p>Minimum staffing and salaried positions belong in fixed payroll. Extra hourly labour that rises directly with occupied rooms belongs in variable cost.</p></details><details><summary>Should ADR include VAT or sales tax?<span></span></summary><p>No. Use net revenue and net costs on the same basis. Tax collected on behalf of authorities is not hotel revenue.</p></details><details><summary>Does break-even occupancy mean the hotel is healthy?<span></span></summary><p>Not necessarily. Break-even only means the entered costs are covered. Hotels also need capital expenditure, debt obligations, owner returns and resilience for weaker periods.</p></details></div></div></section>
-</main><div data-site-footer></div></body></html>
+<body class="calculator-page" data-page="calculator">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div data-site-header></div>
+  <main id="main-content">
+
+    <section class="calculator-simple-hero">
+      <div class="shell" data-reveal>
+        <p class="eyebrow eyebrow-light"><span></span> Free hotel tool</p>
+        <h1>Hotel break-even calculator</h1>
+        <p>Start with the numbers you already know. The result updates instantly and shows the occupancy and room nights needed to cover your costs.</p>
+      </div>
+    </section>
+
+    <section class="calculator-simple-wrap" data-simple-calculator>
+      <div class="shell calculator-simple-layout">
+        <form class="simple-calculator-form" id="breakEvenForm" novalidate>
+          <div class="simple-calculator-heading">
+            <div>
+              <p class="section-kicker">Your hotel</p>
+              <h2>Enter the basics</h2>
+              <p>Use figures excluding VAT or sales tax.</p>
+            </div>
+            <button type="button" class="quiet-button" data-reset-calculator>Reset example</button>
+          </div>
+
+          <div class="simple-input-grid">
+            <label class="simple-field">
+              <span>Currency</span>
+              <select id="currency" name="currency">
+                <option value="EUR">EUR - €</option>
+                <option value="GBP">GBP - £</option>
+                <option value="USD">USD - $</option>
+                <option value="CHF">CHF</option>
+                <option value="RON">RON</option>
+                <option value="CAD">CAD - $</option>
+                <option value="AUD">AUD - $</option>
+              </select>
+            </label>
+
+            <label class="simple-field">
+              <span>Number of rooms</span>
+              <input id="rooms" name="rooms" type="number" min="1" step="1" value="50">
+              <small>Total sellable rooms in the hotel.</small>
+            </label>
+
+            <label class="simple-field">
+              <span>Days in the period</span>
+              <input id="days" name="days" type="number" min="1" max="366" step="1" value="30">
+              <small>For example 30 for a month or 365 for a year.</small>
+            </label>
+
+            <label class="simple-field">
+              <span>Average room rate - ADR</span>
+              <div class="simple-money"><b data-currency-symbol>€</b><input id="adr" name="adr" type="number" min="0" step="0.01" value="120"></div>
+              <small>Average room revenue per occupied room.</small>
+            </label>
+
+            <div class="simple-divider"></div>
+            <p class="simple-section-title">Costs</p>
+
+            <label class="simple-field">
+              <span>Variable cost per occupied room</span>
+              <div class="simple-money"><b data-currency-symbol>€</b><input id="variableCost" name="variableCost" type="number" min="0" step="0.01" value="22"></div>
+              <small>Housekeeping, laundry, amenities, included breakfast, extra utilities, etc.</small>
+            </label>
+
+            <label class="simple-field">
+              <span>Fixed costs for the period</span>
+              <div class="simple-money"><b data-currency-symbol>€</b><input id="fixedCost" name="fixedCost" type="number" min="0" step="100" value="70000"></div>
+              <small>Payroll, rent, base utilities, software, insurance, maintenance, etc.</small>
+            </label>
+
+            <div class="simple-divider"></div>
+            <p class="simple-section-title">Scenario</p>
+
+            <label class="simple-field">
+              <span>Current / expected occupancy</span>
+              <div class="simple-percent"><input id="currentOccupancy" name="currentOccupancy" type="number" min="0" max="100" step="0.1" value="65"><b>%</b></div>
+              <small>Used to estimate your current projected result.</small>
+            </label>
+
+            <label class="simple-field">
+              <span>Optional target profit</span>
+              <div class="simple-money"><b data-currency-symbol>€</b><input id="targetProfit" name="targetProfit" type="number" min="0" step="100" value="0"></div>
+              <small>Leave at zero if you only want pure break-even.</small>
+            </label>
+
+            <details class="simple-advanced">
+              <summary>Advanced distribution assumptions - optional</summary>
+              <div class="simple-input-grid">
+                <label class="simple-field">
+                  <span>Other revenue per occupied room</span>
+                  <div class="simple-money"><b data-currency-symbol>€</b><input id="ancillaryRevenue" name="ancillaryRevenue" type="number" min="0" step="0.01" value="0"></div>
+                  <small>Parking, breakfast revenue, F&amp;B, upsells, etc.</small>
+                </label>
+
+                <label class="simple-field">
+                  <span>OTA share of room revenue</span>
+                  <div class="simple-percent"><input id="otaShare" name="otaShare" type="number" min="0" max="100" step="0.1" value="0"><b>%</b></div>
+                  <small>Share of room revenue sold through commission channels.</small>
+                </label>
+
+                <label class="simple-field">
+                  <span>Average OTA commission</span>
+                  <div class="simple-percent"><input id="otaCommission" name="otaCommission" type="number" min="0" max="100" step="0.1" value="15"><b>%</b></div>
+                  <small>Applied only to the OTA share above.</small>
+                </label>
+
+                <label class="simple-field">
+                  <span>Payment / merchant fee</span>
+                  <div class="simple-percent"><input id="paymentFee" name="paymentFee" type="number" min="0" max="100" step="0.1" value="0"><b>%</b></div>
+                  <small>Applied to total revenue.</small>
+                </label>
+              </div>
+            </details>
+          </div>
+
+          <div class="simple-calculator-error" data-calculator-error role="alert" hidden></div>
+          <p class="simple-form-note">The example values are generic and are not based on Hotel Elisabeth or any other specific hotel. Your entries are stored only in your browser.</p>
+        </form>
+
+        <section class="simple-calculator-results" aria-live="polite">
+          <div class="simple-result-primary">
+            <span>Break-even occupancy</span>
+            <strong data-result="breakEvenOccupancy">-</strong>
+            <p data-result="breakEvenNarrative">Enter your assumptions to calculate.</p>
+            <div class="simple-meter"><i data-break-even-meter></i></div>
+          </div>
+
+          <div class="simple-result-grid">
+            <article>
+              <span>Break-even room nights</span>
+              <strong data-result="breakEvenNights">-</strong>
+              <small data-result="roomsPerDay">-</small>
+            </article>
+            <article>
+              <span>Contribution per occupied room</span>
+              <strong data-result="contributionPerRoom">-</strong>
+              <small>After variable and optional distribution costs.</small>
+            </article>
+            <article>
+              <span>Projected result at current occupancy</span>
+              <strong data-result="currentProfit">-</strong>
+              <small data-result="currentMargin">-</small>
+            </article>
+            <article>
+              <span>Occupancy for target profit</span>
+              <strong data-result="targetOccupancy">-</strong>
+              <small data-result="targetNarrative">-</small>
+            </article>
+            <article>
+              <span>ADR needed at current occupancy</span>
+              <strong data-result="requiredAdr">-</strong>
+              <small>To reach the target entered above.</small>
+            </article>
+            <article>
+              <span>Revenue at break-even</span>
+              <strong data-result="breakEvenRevenue">-</strong>
+              <small data-result="breakEvenRevpar">-</small>
+            </article>
+          </div>
+
+          <div class="simple-chart-card">
+            <div class="simple-chart-heading">
+              <strong>Revenue vs total cost</strong>
+              <span>0% - 100% occupancy</span>
+            </div>
+            <div class="simple-chart-wrap">
+              <svg id="breakEvenChart" viewBox="0 0 680 300" role="img" aria-labelledby="chartTitle chartDescription">
+                <title id="chartTitle">Hotel revenue and total cost by occupancy</title>
+                <desc id="chartDescription">Line chart showing hotel revenue and total cost from zero to one hundred percent occupancy.</desc>
+              </svg>
+            </div>
+          </div>
+          <p class="simple-result-note">Planning tool only. The result is only as accurate as the assumptions entered.</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="calculator-simple-explain">
+      <div class="shell calculator-simple-explain-grid" data-reveal>
+        <div>
+          <p class="section-kicker">The simple logic</p>
+          <h2>What counts as fixed and variable?</h2>
+        </div>
+        <div>
+          <p><strong>Fixed costs</strong> are costs you carry even with very low occupancy - base payroll, rent, insurance, software, minimum utility consumption and similar overhead.</p>
+          <p><strong>Variable cost per occupied room</strong> is the additional cost created when one more room is occupied - housekeeping, laundry, guest amenities, included breakfast cost and the occupancy-related part of utilities.</p>
+          <p>If you want a quick management estimate, those two totals are enough. The advanced section only exists for hotels that want to include OTA and payment costs in the contribution calculation.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div data-site-footer></div>
+</body>
+</html>
