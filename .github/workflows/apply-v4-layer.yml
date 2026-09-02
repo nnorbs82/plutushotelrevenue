@@ -1,0 +1,48 @@
+name: Apply Plutus v4 visual layer
+
+on:
+  push:
+    branches:
+      - plutus-v4-real-preview
+    paths:
+      - '.github/workflows/apply-v4-layer.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v4-real-preview
+          fetch-depth: 0
+      - name: Add v4 stylesheet to HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          marker = '<link rel="stylesheet" href="plutus-v3.css?v=20260902c">'
+          replacement = marker + '\n  <link rel="stylesheet" href="plutus-v4.css?v=20260902d">'
+          for path in Path('.').glob('*.html'):
+              text = path.read_text(encoding='utf-8')
+              if 'plutus-v4.css' not in text:
+                  if marker in text:
+                      text = text.replace(marker, replacement)
+                  else:
+                      text = text.replace('</head>', '  <link rel="stylesheet" href="plutus-v4.css?v=20260902d">\n</head>')
+                  path.write_text(text, encoding='utf-8')
+          PY
+      - name: Validate syntax
+        run: |
+          node --check navigation.js
+          node --check calculator.js
+      - name: Commit layer
+        run: |
+          rm -f .github/workflows/apply-v4-layer.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "style: apply Plutus v4 visual system across preview"
+          git push origin HEAD:plutus-v4-real-preview
