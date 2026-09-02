@@ -1,4 +1,5 @@
 name: Validate balanced Plutus revision
+# Retry after validator update
 
 on:
   push:
