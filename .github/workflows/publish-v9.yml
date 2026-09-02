@@ -1,0 +1,122 @@
+name: Publish Plutus V9 reframe
+
+on:
+  push:
+    branches:
+      - plutus-v9-reframe
+    paths:
+      - '.github/workflows/publish-v9.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v9-reframe
+          fetch-depth: 0
+
+      - name: Verify and assemble V9
+        run: |
+          echo 'bab7f97c7612b7d0bbfcbbd121e532b995516672aefde380bb706d360f201f4b  .v9/part00' | sha256sum -c -
+          echo '09f10bf5974a2329ea85c8385a6e1dea1267cedddfbede1f5ce76268dc1712d1  .v9/part01' | sha256sum -c -
+          echo 'dc18c1303fdb6bcf7b72a703d5d63014cd82ab0a9a42b41b22e6b3542a153c59  .v9/part02' | sha256sum -c -
+          echo '53f45e448cd87405418d9736334f304058272d42de156903d5533205ac060a59  .v9/part03' | sha256sum -c -
+          echo 'fcb61714c05af9b141c945c6b8e6d00b6ba9c38f9269af5792ce3db6db8371c2  .v9/part04' | sha256sum -c -
+          cat .v9/part00 .v9/part01 .v9/part02 .v9/part03 .v9/part04 > /tmp/plutus-v9.b64
+          test "$(wc -c < /tmp/plutus-v9.b64)" -eq 34684
+          base64 -d /tmp/plutus-v9.b64 > /tmp/plutus-v9.tgz
+          echo '97dbf81d17e483e494dfda6a6bac5a56cec53f7a0b5cfeecd0846ff5d217149e  /tmp/plutus-v9.tgz' | sha256sum -c -
+          tar -xzf /tmp/plutus-v9.tgz
+
+      - name: Validate V9 site
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          from urllib.parse import urlsplit
+          import re
+
+          pages = [
+            'index.html','about.html','revenue_management.html','software.html','mews_pms.html',
+            'cloudbeds_pms.html','siteminder_chm.html','tips.html','hotel_photoshoot_tips.html',
+            'web_design_tips.html','digital_marketing_tips.html','hotel-break-even-calculator.html',
+            'blog.html','contact.html','privacy_policy.html','terms_and_conditions.html','404.html','admin.html'
+          ]
+          known_assets = {
+            'logo/logo.png','about/profile_photo.png','index/heroback.webp','index/orv.webp',
+            'index/tai.webp','index/marketback.webp','index/si.webp',
+            'softwareinformation/mews logo.png','softwareinformation/cloudbeds logo.jpg',
+            'softwareinformation/siteminder logo.png'
+          }
+          errors=[]
+          class Parser(HTMLParser):
+            def __init__(self): super().__init__(); self.refs=[]; self.h1=0
+            def handle_starttag(self, tag, attrs):
+              d=dict(attrs)
+              if tag == 'h1': self.h1 += 1
+              for key in ('href','src'):
+                if key in d: self.refs.append(d[key])
+
+          for name in pages:
+            p=Path(name)
+            if not p.exists(): errors.append(f'missing {name}'); continue
+            text=p.read_text(encoding='utf-8')
+            if 'v9.css' not in text or 'v9.js' not in text: errors.append(f'{name}: missing V9 assets')
+            if 'data-v9-header' not in text or 'data-v9-footer' not in text: errors.append(f'{name}: missing shared shell')
+            parser=Parser(); parser.feed(text)
+            if parser.h1 != 1: errors.append(f'{name}: expected one H1, found {parser.h1}')
+            if name not in {'privacy_policy.html','terms_and_conditions.html','404.html','admin.html'}:
+              match=re.search(r"\b(we|we're|we've|we'll|our|ours|us)\b", text, re.I)
+              if match: errors.append(f'{name}: agency-style plural voice {match.group(0)!r}')
+            for ref in parser.refs:
+              if not ref or ref.startswith('#'): continue
+              u=urlsplit(ref)
+              if u.scheme or u.netloc: continue
+              path=u.path
+              if path in known_assets: continue
+              if path and not Path(path).exists(): errors.append(f'{name}: broken local ref {ref}')
+
+          css=Path('v9.css').read_text(encoding='utf-8')
+          if css.count('{') != css.count('}'): errors.append('v9.css: unbalanced braces')
+
+          software_checks = {
+            'mews_pms.html': ['softwareinformation/mews logo.png','15,000+','1,000+'],
+            'cloudbeds_pms.html': ['softwareinformation/cloudbeds logo.jpg','300+','Ask Signals'],
+            'siteminder_chm.html': ['softwareinformation/siteminder logo.png','450+','350+']
+          }
+          for page, needles in software_checks.items():
+            text=Path(page).read_text(encoding='utf-8')
+            for needle in needles:
+              if needle not in text: errors.append(f'{page}: missing software content {needle!r}')
+
+          if errors: raise SystemExit('\n'.join(errors))
+          print('Static V9 validation passed for', len(pages), 'pages')
+          PY
+          node --check v9.js
+          node --check calculator-v9-core.js
+          node --check calculator-v9.js
+          node - <<'NODE'
+          const c=require('./calculator-v9-core.js');
+          let m=c.calculate({rooms:50,days:30,adr:120,variableCost:22,fixedCost:70000});
+          if(!m.valid) throw new Error(JSON.stringify(m.errors));
+          if(Math.abs(m.contribution-98)>1e-6) throw new Error('Contribution regression');
+          if(Math.abs(m.beOcc-47.619047619)>0.001) throw new Error('Break-even regression');
+          if(m.currentProfit!==null) throw new Error('Blank occupancy should not project profit');
+          m=c.calculate({rooms:50,days:30,adr:120,variableCost:22,fixedCost:70000,currentOccupancy:65});
+          if(Math.abs(m.currentProfit-25550)>1e-6) throw new Error('Scenario regression');
+          console.log('Calculator regression passed:', m.beOcc.toFixed(2)+'%');
+          NODE
+
+      - name: Commit clean V9 preview branch
+        run: |
+          rm -rf .v9 .github/workflows/publish-v9.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'design: reframe Plutus V9 around decisions and real software brands'
+          git push origin HEAD:plutus-v9-reframe
