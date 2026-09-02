@@ -1,0 +1,30 @@
+name: Export Plutus assets
+
+on:
+  push:
+    branches:
+      - plutus-redesign
+    paths:
+      - '.github/workflows/export-plutus-assets.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-redesign
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plutus-assets
+          path: |
+            logo
+            index
+            about
+            orm
+            softwareinformation
+          if-no-files-found: error
+          retention-days: 1
