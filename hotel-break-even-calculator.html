@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08090B">
+  <link rel="icon" href="logo/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="v9.css?v=20260902">
+  <script defer src="v9.js?v=20260902"></script>
+  <title>Hotel Break-even Calculator | Plutus</title>
+  <meta name="description" content="Calculate hotel break-even occupancy from rooms, days, ADR, variable room cost and fixed costs.">
+  <script defer src="calculator-v9-core.js?v=20260902"></script>
+  <script defer src="calculator-v9.js?v=20260902"></script>
+</head>
+<body class="page-calculator">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div data-v9-header></div>
+  <main id="main-content">
+
+<section class="calc-console"><div class="calc-top"><p>PLUTUS / BREAK-EVEN ENGINE</p><h1>What occupancy<br>pays the bills?</h1><span>Enter five core figures. No property data is pre-loaded.</span></div><form id="calcForm" class="calc-controls" data-calculator novalidate><label><span>ROOMS</span><input id="rooms" type="number" min="1" placeholder="50"></label><label><span>DAYS</span><input id="days" type="number" min="1" max="366" placeholder="30"></label><label><span>ADR</span><input id="adr" type="number" min="0" step="0.01" placeholder="120"></label><label><span>VARIABLE / ROOM</span><input id="variableCost" type="number" min="0" step="0.01" placeholder="22"></label><label><span>FIXED COSTS</span><input id="fixedCost" type="number" min="0" step="100" placeholder="70000"></label><label class="currency-control"><span>CURRENCY</span><select id="currency"><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="USD">USD</option><option value="CHF">CHF</option><option value="RON">RON</option></select></label></form><div class="calc-output"><div class="calc-main-result"><span>BREAK-EVEN OCCUPANCY</span><strong id="beOcc">-</strong><p id="beNarrative">Enter the five figures above.</p></div><div class="calc-side-results"><div><span>ROOM NIGHTS</span><strong id="beNights">-</strong></div><div><span>CONTRIBUTION / ROOM</span><strong id="contribution">-</strong></div><div><span>PROJECTED RESULT</span><strong id="currentProfit">-</strong></div><div><span>TARGET OCCUPANCY</span><strong id="targetOcc">-</strong></div></div><div class="calc-graph"><svg id="calcChart" viewBox="0 0 800 260" aria-label="Revenue and cost graph"></svg></div></div><details class="calc-drawer"><summary>OPTIONAL SCENARIO + DISTRIBUTION INPUTS</summary><div class="drawer-grid"><label><span>Expected occupancy %</span><input id="currentOccupancy" type="number" min="0" max="100" step="0.1" placeholder="65"></label><label><span>Target profit</span><input id="targetProfit" type="number" min="0" step="100" placeholder="10000"></label><label><span>Other revenue / occupied room</span><input id="ancillaryRevenue" type="number" min="0" step="0.01" placeholder="12"></label><label><span>OTA share %</span><input id="otaShare" type="number" min="0" max="100" step="0.1" placeholder="45"></label><label><span>Average OTA commission %</span><input id="otaCommission" type="number" min="0" max="100" step="0.1" placeholder="17"></label><label><span>Payment fee %</span><input id="paymentFee" type="number" min="0" max="100" step="0.1" placeholder="1.5"></label></div></details><div id="calcError" class="calc-error" hidden></div></section>
+<section class="calc-method"><span>THE LOGIC</span><p><b>Available room nights</b> = rooms × days</p><p><b>Contribution</b> = revenue per occupied room - variable and optional distribution costs</p><p><b>Break-even room nights</b> = fixed costs ÷ contribution</p><p><b>Break-even occupancy</b> = break-even room nights ÷ available room nights</p></section>
+
+  </main>
+  <div data-v9-footer></div>
+</body>
+</html>
