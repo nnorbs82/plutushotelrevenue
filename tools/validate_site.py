@@ -33,8 +33,6 @@ EXPECTED_HTML = {
     "web_design_tips.html",
 }
 
-# These image files already live in the repository and are intentionally kept
-# outside this redesign bundle when it is validated before committing.
 REPOSITORY_ASSETS = {
     "logo/logo.png",
     "index/heroback.webp",
@@ -139,7 +137,7 @@ def validate() -> list[str]:
     if missing_pages:
         problems.append(f"Missing expected HTML pages: {', '.join(missing_pages)}")
 
-    for required in ("styles.css", "navigation.js", "calculator.js", "robots.txt", "sitemap.xml"):
+    for required in ("styles.css", "plutus-v2.css", "plutus-v3.css", "navigation.js", "calculator.js", "robots.txt", "sitemap.xml"):
         if not (ROOT / required).is_file():
             problems.append(f"Missing required file: {required}")
 
@@ -148,7 +146,7 @@ def validate() -> list[str]:
         parser = PageParser()
         try:
             parser.feed(page.read_text(encoding="utf-8"))
-        except Exception as exc:  # pragma: no cover - defensive validation
+        except Exception as exc:
             problems.append(f"{page_name}: could not parse HTML ({exc})")
             continue
 
@@ -193,29 +191,28 @@ def validate() -> list[str]:
             if path and not ((ROOT / path).exists() or path in REPOSITORY_ASSETS):
                 problems.append(f"{page_name}: missing stylesheet '{href}'")
 
-    css_path = ROOT / "styles.css"
-    if css_path.is_file():
-        css = css_path.read_text(encoding="utf-8")
-        if css.count("{") != css.count("}"):
-            problems.append("styles.css: unbalanced braces")
-        for match in re.finditer(r"url\(\s*['\"]?([^)'\"]+)", css):
-            reference = match.group(1).strip()
-            if reference.startswith("#"):
-                continue
-            path = local_path(reference)
-            if path and not ((ROOT / path).exists() or path in REPOSITORY_ASSETS):
-                problems.append(f"styles.css: missing local asset '{reference}'")
+    for css_name in ("styles.css", "plutus-v2.css", "plutus-v3.css"):
+        css_path = ROOT / css_name
+        if css_path.is_file():
+            css = css_path.read_text(encoding="utf-8")
+            if css.count("{") != css.count("}"):
+                problems.append(f"{css_name}: unbalanced braces")
+            for match in re.finditer(r"url\(\s*['\"]?([^)'\"]+)", css):
+                reference = match.group(1).strip()
+                if reference.startswith("#"):
+                    continue
+                path = local_path(reference)
+                if path and not ((ROOT / path).exists() or path in REPOSITORY_ASSETS):
+                    problems.append(f"{css_name}: missing local asset '{reference}'")
 
     calculator_path = ROOT / "hotel-break-even-calculator.html"
     if calculator_path.is_file():
         calculator_html = calculator_path.read_text(encoding="utf-8")
-        required_ids = {"breakEvenForm", "breakEvenChart", *[name for name in (
-            "rooms", "days", "outOfOrder", "currentOccupancy", "targetProfit", "adr",
-            "ancillaryRevenue", "otaShare", "otaCommission", "paymentFee", "revenueFee",
-            "housekeeping", "linen", "amenities", "variableUtilities", "breakfastCost",
-            "otherVariable", "payroll", "rent", "fixedUtilities", "insurance", "technology",
-            "maintenance", "salesAdmin", "otherFixed"
-        )]}
+        required_ids = {
+            "breakEvenForm", "breakEvenChart", "currency", "rooms", "days", "adr",
+            "variableCost", "fixedCost", "currentOccupancy", "targetProfit",
+            "ancillaryRevenue", "otaShare", "otaCommission", "paymentFee"
+        }
         for required_id in sorted(required_ids):
             if f'id="{required_id}"' not in calculator_html:
                 problems.append(f"hotel-break-even-calculator.html: missing #{required_id}")
@@ -238,13 +235,13 @@ def validate() -> list[str]:
 def main() -> int:
     problems = validate()
     if problems:
-        print("Site validation failed:")
+        print("Site validation failed:", file=sys.stderr)
         for problem in problems:
-            print(f" - {problem}")
+            print(f" - {problem}", file=sys.stderr)
         return 1
-    print(f"Site validation passed for {len(list(ROOT.glob('*.html')))} HTML pages.")
+    print("Site validation passed.")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())
