@@ -1,0 +1,67 @@
+name: Apply Plutus V5 globally
+
+on:
+  push:
+    branches:
+      - plutus-v5-preview
+    paths:
+      - '.github/workflows/apply-v5-global.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v5-preview
+          fetch-depth: 0
+      - name: Apply V5 stylesheet and cleanup
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          v5 = '<link rel="stylesheet" href="plutus-v5.css?v=20260902e">'
+          for path in Path('.').glob('*.html'):
+              text = path.read_text(encoding='utf-8')
+              if 'plutus-v5.css' not in text:
+                  if '</head>' in text:
+                      text = text.replace('</head>', f'  {v5}\n</head>', 1)
+              path.write_text(text, encoding='utf-8')
+
+          privacy = Path('privacy_policy.html')
+          if privacy.exists():
+              text = privacy.read_text(encoding='utf-8')
+              text = text.replace('The calculator uses browser local storage so assumptions remain available on your device; remove them with “Reset example” or by clearing site data.', 'The break-even calculator runs entirely in your browser. The V5 calculator does not save the figures you enter after you leave or reload the page.')
+              text = text.replace('The core website does not intentionally set advertising cookies.', 'The core website does not intentionally set advertising cookies.')
+              privacy.write_text(text, encoding='utf-8')
+          PY
+          rm -f v5-marker.txt v5-source-note.txt V5_DIRECTION.md
+      - name: Validate
+        run: |
+          python tools/validate_site.py
+          node --check navigation.js
+          node --check calculator.js
+          test -s plutus-v5.css
+          python - <<'PY'
+          from pathlib import Path
+          missing=[p.name for p in Path('.').glob('*.html') if 'plutus-v5.css' not in p.read_text(encoding='utf-8')]
+          if missing: raise SystemExit('Missing V5 stylesheet: ' + ', '.join(missing))
+          PY
+          node - <<'NODE'
+          const calc=require('./calculator.js');
+          const m=calc.calculateModel({currency:'EUR',rooms:50,days:30,adr:120,variableCost:22,fixedCost:70000,currentOccupancy:'',targetProfit:'',ancillaryRevenue:'',otaShare:'',otaCommission:'',paymentFee:''});
+          if(!m.valid) throw new Error(JSON.stringify(m.errors));
+          if(Math.abs(m.breakEvenOccupancy-47.619047619)>0.001) throw new Error('Break-even regression failed');
+          console.log('V5 break-even regression OK',m.breakEvenOccupancy.toFixed(2));
+          NODE
+      - name: Commit
+        run: |
+          rm -f .github/workflows/apply-v5-global.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "design: apply Plutus V5 across full preview site"
+          git push origin HEAD:plutus-v5-preview
