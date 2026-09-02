@@ -1,405 +1,307 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const navMenu = document.querySelector('.nav-menu');
+(() => {
+  'use strict';
 
-    if (!navMenu) return;
+  const page = document.body.dataset.page || '';
+  const currentYear = new Date().getFullYear();
+  const chevron = '<svg class="nav-chevron" viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5"/></svg>';
+  const arrow = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>';
 
-    let scrollTicking = false;
-    let navigationInProgress = false;
-    let softwareParallaxCleanup = null;
-    let contactFormCleanup = null;
-    let mobileMenuToggle = null;
+  const isActive = (...names) => names.includes(page) ? ' is-active' : '';
+  const headerTarget = document.querySelector('[data-site-header]');
 
-    function updateNavOnScroll() {
-        navMenu.classList.toggle('scrolled', window.scrollY > 40);
-        scrollTicking = false;
-    }
+  if (headerTarget) {
+    headerTarget.innerHTML = `
+      <header class="site-header" data-header>
+        <nav class="nav-shell" aria-label="Main navigation">
+          <a class="site-brand" href="index.html" aria-label="Plutus Hotel Revenue - home">
+            <span class="site-brand-mark"><img src="logo/logo.png" alt=""></span>
+            <span class="site-brand-copy"><strong>PLUTUS</strong><small>Hotel Revenue</small></span>
+          </a>
 
-    function requestScrollTick() {
-        if (scrollTicking) return;
+          <div class="desktop-nav">
+            <a class="nav-link${isActive('home')}" href="index.html">Home</a>
+            <a class="nav-link${isActive('about')}" href="about.html">About</a>
+            <a class="nav-link${isActive('revenue')}" href="revenue_management.html">Revenue management</a>
 
-        window.requestAnimationFrame(updateNavOnScroll);
-        scrollTicking = true;
-    }
+            <div class="nav-dropdown" data-dropdown>
+              <button class="nav-dropdown-toggle${isActive('software')}" type="button" aria-expanded="false">Software ${chevron}</button>
+              <div class="nav-dropdown-panel">
+                <a href="software.html">Software overview</a>
+                <a href="mews_pms.html">Mews PMS</a>
+                <a href="cloudbeds_pms.html">Cloudbeds PMS</a>
+                <a href="siteminder_chm.html">SiteMinder channel manager</a>
+              </div>
+            </div>
 
-    function closeDropdowns(exception) {
-        navMenu.querySelectorAll('.nav-dropdown').forEach(function(dropdown) {
-            if (dropdown === exception) return;
+            <div class="nav-dropdown" data-dropdown>
+              <button class="nav-dropdown-toggle${isActive('tips', 'calculator')}" type="button" aria-expanded="false">Tips &amp; tools ${chevron}</button>
+              <div class="nav-dropdown-panel">
+                <a href="tips.html">Tips overview</a>
+                <a href="hotel_photoshoot_tips.html">Hotel photography</a>
+                <a href="web_design_tips.html">Hotel web design</a>
+                <a href="digital_marketing_tips.html">Digital marketing</a>
+                <a class="featured-link" href="hotel-break-even-calculator.html">Free break-even calculator</a>
+              </div>
+            </div>
 
-            dropdown.classList.remove('is-open');
-            const toggle = dropdown.querySelector('.nav-dropdown-toggle');
-            if (toggle) toggle.setAttribute('aria-expanded', 'false');
-        });
-    }
+            <a class="nav-link${isActive('blog')}" href="blog.html">Journal</a>
+          </div>
 
-    function initializeDropdowns() {
-        navMenu.querySelectorAll('.nav-dropdown').forEach(function(dropdown) {
-            const toggle = dropdown.querySelector('.nav-dropdown-toggle');
-            if (!toggle) return;
+          <a class="nav-cta" href="contact.html">Discuss your hotel</a>
+          <button class="mobile-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-navigation"><span></span></button>
 
-            toggle.addEventListener('click', function(event) {
-                event.stopPropagation();
-                const willOpen = !dropdown.classList.contains('is-open');
+          <div class="mobile-navigation" id="mobile-navigation">
+            <a class="${isActive('home').trim()}" href="index.html">Home</a>
+            <a class="${isActive('about').trim()}" href="about.html">About</a>
+            <a class="${isActive('revenue').trim()}" href="revenue_management.html">Revenue management</a>
+            <div class="mobile-accordion">
+              <button class="${isActive('software').trim()}" type="button" aria-expanded="false">Software ${chevron}</button>
+              <div class="mobile-accordion-panel"><div>
+                <a href="software.html">Software overview</a>
+                <a href="mews_pms.html">Mews PMS</a>
+                <a href="cloudbeds_pms.html">Cloudbeds PMS</a>
+                <a href="siteminder_chm.html">SiteMinder channel manager</a>
+              </div></div>
+            </div>
+            <div class="mobile-accordion">
+              <button class="${isActive('tips', 'calculator').trim()}" type="button" aria-expanded="false">Tips &amp; tools ${chevron}</button>
+              <div class="mobile-accordion-panel"><div>
+                <a href="tips.html">Tips overview</a>
+                <a href="hotel_photoshoot_tips.html">Hotel photography</a>
+                <a href="web_design_tips.html">Hotel web design</a>
+                <a href="digital_marketing_tips.html">Digital marketing</a>
+                <a href="hotel-break-even-calculator.html">Free break-even calculator</a>
+              </div></div>
+            </div>
+            <a class="${isActive('blog').trim()}" href="blog.html">Journal</a>
+            <a class="mobile-contact${isActive('contact')}" href="contact.html">Discuss your hotel</a>
+          </div>
+        </nav>
+      </header>`;
+  }
 
-                closeDropdowns(dropdown);
-                dropdown.classList.toggle('is-open', willOpen);
-                toggle.setAttribute('aria-expanded', String(willOpen));
+  const footerTarget = document.querySelector('[data-site-footer]');
+  if (footerTarget) {
+    footerTarget.innerHTML = `
+      <footer class="site-footer">
+        <div class="shell">
+          <div class="footer-main">
+            <div class="footer-brand">
+              <a class="site-brand" href="index.html" aria-label="Plutus Hotel Revenue - home">
+                <span class="site-brand-mark"><img src="logo/logo.png" alt=""></span>
+                <span class="site-brand-copy"><strong>PLUTUS</strong><small>Hotel Revenue</small></span>
+              </a>
+              <p>Straightforward outsourced revenue management and practical commercial guidance for independent hotels.</p>
+              <div class="footer-socials">
+                <a href="https://www.linkedin.com/company/plutushotelrevenue/" target="_blank" rel="noopener noreferrer" aria-label="Plutus on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9v9M6 6.5v.1M10 18v-5c0-2 1.2-3.2 3-3.2s3 1.2 3 3.2v5M10 10v8"/></svg></a>
+                <a href="https://www.facebook.com/plutushotelrevenue/" target="_blank" rel="noopener noreferrer" aria-label="Plutus on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v5h4v-5h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg></a>
+              </div>
+            </div>
+            <div class="footer-column"><strong>Company</strong><a href="about.html">About</a><a href="revenue_management.html">Revenue management</a><a href="blog.html">Journal</a><a href="contact.html">Contact</a></div>
+            <div class="footer-column"><strong>Software</strong><a href="software.html">Overview</a><a href="mews_pms.html">Mews</a><a href="cloudbeds_pms.html">Cloudbeds</a><a href="siteminder_chm.html">SiteMinder</a></div>
+            <div class="footer-column"><strong>Tips &amp; tools</strong><a href="hotel-break-even-calculator.html">Break-even calculator</a><a href="hotel_photoshoot_tips.html">Photography</a><a href="web_design_tips.html">Web design</a><a href="digital_marketing_tips.html">Digital marketing</a></div>
+            <div class="footer-column"><strong>Legal</strong><a href="privacy_policy.html">Privacy notice</a><a href="terms_and_conditions.html">Terms</a></div>
+          </div>
+          <div class="footer-bottom"><span>© ${currentYear} Plutus Hotel Revenue. All rights reserved.</span><span>Barcelona, Spain · Built for independent hotels</span></div>
+        </div>
+      </footer>`;
+  }
 
-                if (event.detail > 0) toggle.blur();
-            });
-        });
-    }
+  const header = document.querySelector('[data-header]');
+  const menuButton = document.querySelector('.mobile-menu-toggle');
+  const mobileNavigation = document.querySelector('.mobile-navigation');
+  const dropdowns = Array.from(document.querySelectorAll('[data-dropdown]'));
 
-    function closeMobileMenu() {
-        navMenu.classList.remove('mobile-menu-open');
-        if (mobileMenuToggle) mobileMenuToggle.setAttribute('aria-expanded', 'false');
-    }
+  const updateHeader = () => {
+    if (header) header.classList.toggle('is-scrolled', window.scrollY > 18);
+  };
+  updateHeader();
+  window.addEventListener('scroll', updateHeader, { passive: true });
 
-    function initializeMobileMenu() {
-        const navLinks = navMenu.querySelector('.nav-links');
-        if (!navLinks) return;
+  const closeDropdowns = (except = null) => {
+    dropdowns.forEach((dropdown) => {
+      if (dropdown === except) return;
+      dropdown.classList.remove('is-open');
+      const button = dropdown.querySelector('button');
+      if (button) button.setAttribute('aria-expanded', 'false');
+    });
+  };
 
-        mobileMenuToggle = document.createElement('button');
-        mobileMenuToggle.type = 'button';
-        mobileMenuToggle.className = 'nav-mobile-toggle';
-        mobileMenuToggle.title = 'Menu';
-        mobileMenuToggle.setAttribute('aria-label', 'Menu');
-        mobileMenuToggle.setAttribute('aria-expanded', 'false');
-        mobileMenuToggle.setAttribute('aria-controls', 'mobile-navigation-panel');
-        mobileMenuToggle.innerHTML = '<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect x="2" y="5" width="28" height="5" rx="1.5"></rect><rect x="2" y="13.5" width="28" height="5" rx="1.5"></rect><rect x="2" y="22" width="28" height="5" rx="1.5"></rect></svg>';
+  dropdowns.forEach((dropdown) => {
+    const button = dropdown.querySelector('button');
+    if (!button) return;
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const opening = !dropdown.classList.contains('is-open');
+      closeDropdowns(dropdown);
+      dropdown.classList.toggle('is-open', opening);
+      button.setAttribute('aria-expanded', String(opening));
+    });
+  });
 
-        navLinks.id = 'mobile-navigation-panel';
-        navMenu.insertBefore(mobileMenuToggle, navLinks);
+  document.addEventListener('click', () => closeDropdowns());
 
-        const mobileDestinations = {
-            SOFTWARE: 'software.html',
-            TIPS: 'tips.html'
-        };
+  const closeMobileMenu = (restoreFocus = false) => {
+    if (!header || !menuButton) return;
+    header.classList.remove('is-menu-open');
+    document.body.classList.remove('nav-open');
+    menuButton.setAttribute('aria-expanded', 'false');
+    menuButton.setAttribute('aria-label', 'Open navigation');
+    if (restoreFocus) menuButton.focus();
+  };
 
-        navMenu.querySelectorAll('.nav-dropdown').forEach(function(dropdown) {
-            const toggle = dropdown.querySelector('.nav-dropdown-toggle');
-            if (!toggle) return;
+  const openMobileMenu = () => {
+    if (!header || !menuButton) return;
+    header.classList.add('is-menu-open');
+    document.body.classList.add('nav-open');
+    menuButton.setAttribute('aria-expanded', 'true');
+    menuButton.setAttribute('aria-label', 'Close navigation');
+    const firstLink = mobileNavigation?.querySelector('a, button');
+    window.setTimeout(() => firstLink?.focus(), 60);
+  };
 
-            const label = toggle.textContent.trim().toUpperCase();
-            const destination = mobileDestinations[label];
-            if (!destination) return;
+  menuButton?.addEventListener('click', () => {
+    if (header?.classList.contains('is-menu-open')) closeMobileMenu();
+    else openMobileMenu();
+  });
 
-            const link = document.createElement('a');
-            link.className = 'nav-mobile-direct-link';
-            link.href = destination;
-            link.textContent = label;
-            dropdown.insertBefore(link, toggle);
-        });
+  document.querySelectorAll('.mobile-accordion').forEach((accordion) => {
+    const button = accordion.querySelector(':scope > button');
+    button?.addEventListener('click', () => {
+      const opening = !accordion.classList.contains('is-open');
+      accordion.classList.toggle('is-open', opening);
+      button.setAttribute('aria-expanded', String(opening));
+    });
+  });
 
-        mobileMenuToggle.addEventListener('click', function(event) {
-            event.stopPropagation();
-            if (!window.matchMedia('(max-width: 999px)').matches) return;
-            if (navMenu.classList.contains('mobile-menu-open')) return;
+  mobileNavigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => closeMobileMenu()));
 
-            closeDropdowns();
-            navMenu.classList.add('mobile-menu-open');
-            mobileMenuToggle.setAttribute('aria-expanded', 'true');
-        });
-    }
-
-    function initializeSoftwareParallax() {
-        if (softwareParallaxCleanup) {
-            softwareParallaxCleanup();
-            softwareParallaxCleanup = null;
-        }
-
-        const image = document.querySelector('.software-parallax-image');
-        if (!image) return;
-
-        let ticking = false;
-
-        function updateParallax() {
-            const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-            const travel = maxScroll * 0.3;
-            const offset = Math.min(window.scrollY, maxScroll) * -0.3;
-
-            image.style.setProperty('--software-parallax-travel', `${travel}px`);
-            image.style.setProperty('--software-parallax-offset', `${offset}px`);
-            ticking = false;
-        }
-
-        function requestParallaxUpdate() {
-            if (ticking) return;
-
-            window.requestAnimationFrame(updateParallax);
-            ticking = true;
-        }
-
-        window.addEventListener('scroll', requestParallaxUpdate, { passive: true });
-        window.addEventListener('resize', requestParallaxUpdate);
-        updateParallax();
-
-        softwareParallaxCleanup = function() {
-            window.removeEventListener('scroll', requestParallaxUpdate);
-            window.removeEventListener('resize', requestParallaxUpdate);
-        };
-    }
-
-    function initializeContactForm() {
-        if (contactFormCleanup) {
-            contactFormCleanup();
-            contactFormCleanup = null;
-        }
-
-        const form = document.querySelector('.contact-form');
-        if (!form) return;
-
-        const submitButton = form.querySelector('button[type="submit"]');
-        const status = form.querySelector('.contact-form-status');
-
-        function setStatus(message, state) {
-            if (!status) return;
-
-            status.textContent = message;
-            if (state) {
-                status.dataset.state = state;
-            } else {
-                delete status.dataset.state;
-            }
-        }
-
-        async function handleSubmit(event) {
-            event.preventDefault();
-
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-
-            if (!form.dataset.endpoint) {
-                setStatus('Unable to send. Please try again.', 'error');
-                return;
-            }
-
-            const formData = new FormData(form);
-            const payload = Object.fromEntries(formData.entries());
-
-            submitButton.disabled = true;
-            submitButton.textContent = 'SENDING...';
-            setStatus('', '');
-
-            try {
-                const response = await window.fetch(form.dataset.endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json().catch(function() {
-                    return {};
-                });
-
-                if (!response.ok || result.success === false || result.success === 'false') {
-                    throw new Error(result.message || 'Contact form submission failed');
-                }
-
-                form.reset();
-                setStatus('Message Sent!', 'success');
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : '';
-                const needsActivation = /activat|confirm|unable to submit form|failed to fetch/i.test(errorMessage);
-
-                if (needsActivation) {
-                    setStatus('Check your inbox for the FormSubmit activation email, then try again.', 'error');
-                } else {
-                    setStatus('Unable to send. Please try again.', 'error');
-                }
-
-                console.error('Contact form submission failed:', errorMessage);
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'SUBMIT';
-            }
-        }
-
-        form.addEventListener('submit', handleSubmit);
-        contactFormCleanup = function() {
-            form.removeEventListener('submit', handleSubmit);
-        };
-    }
-
-    async function ensurePageStyles(targetDocument, targetUrl) {
-        const loadedStyles = new Set(
-            Array.from(document.querySelectorAll('link[rel="stylesheet"]')).map(function(link) {
-                return link.href;
-            })
-        );
-
-        const missingStyles = Array.from(targetDocument.querySelectorAll('link[rel="stylesheet"]'))
-            .map(function(link) {
-                return new URL(link.getAttribute('href'), targetUrl).href;
-            })
-            .filter(function(href) {
-                return !loadedStyles.has(href);
-            });
-
-        await Promise.all(missingStyles.map(function(href) {
-            return new Promise(function(resolve) {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = href;
-                link.addEventListener('load', resolve, { once: true });
-                link.addEventListener('error', resolve, { once: true });
-                document.head.appendChild(link);
-            });
-        }));
-    }
-
-    function importPageContent(targetDocument) {
-        const fragment = document.createDocumentFragment();
-
-        Array.from(targetDocument.body.children).forEach(function(element) {
-            if (element.matches('.nav-menu, script')) return;
-            fragment.appendChild(document.importNode(element, true));
-        });
-
-        return fragment;
-    }
-
-    function removeCurrentPageContent() {
-        Array.from(document.body.children).forEach(function(element) {
-            if (element === navMenu) return;
-            element.remove();
-        });
-    }
-
-    async function navigateTo(targetUrl, addHistoryEntry) {
-        if (navigationInProgress) return;
-
-        navigationInProgress = true;
-        document.body.setAttribute('aria-busy', 'true');
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      const openDropdown = document.querySelector('.nav-dropdown.is-open');
+      if (openDropdown) {
+        const button = openDropdown.querySelector('button');
         closeDropdowns();
-        closeMobileMenu();
-
-        try {
-            const response = await window.fetch(targetUrl.href, {
-                headers: { 'X-Requested-With': 'site-navigation' }
-            });
-
-            if (!response.ok) throw new Error(`Navigation failed with ${response.status}`);
-
-            const markup = await response.text();
-            const targetDocument = new DOMParser().parseFromString(markup, 'text/html');
-
-            if (!targetDocument.body || !targetDocument.querySelector('.nav-menu')) {
-                throw new Error('Target page does not use the shared site layout');
-            }
-
-            await ensurePageStyles(targetDocument, targetUrl);
-
-            if (softwareParallaxCleanup) {
-                softwareParallaxCleanup();
-                softwareParallaxCleanup = null;
-            }
-
-            if (contactFormCleanup) {
-                contactFormCleanup();
-                contactFormCleanup = null;
-            }
-
-            const pageContent = importPageContent(targetDocument);
-            removeCurrentPageContent();
-
-            document.body.className = targetDocument.body.className;
-            document.body.appendChild(pageContent);
-            document.title = targetDocument.title;
-
-            if (addHistoryEntry) {
-                window.history.pushState({ siteNavigation: true }, '', targetUrl.href);
-            }
-
-            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-            updateNavOnScroll();
-            initializeSoftwareParallax();
-            initializeContactForm();
-
-            document.dispatchEvent(new CustomEvent('site:pagechange', {
-                detail: { url: targetUrl.href }
-            }));
-        } catch (error) {
-            window.location.assign(targetUrl.href);
-            return;
-        } finally {
-            document.body.removeAttribute('aria-busy');
-            navigationInProgress = false;
-        }
+        button?.focus();
+      } else if (header?.classList.contains('is-menu-open')) {
+        closeMobileMenu(true);
+      }
     }
 
-    function getInternalPageUrl(anchor) {
-        if (!anchor || anchor.target || anchor.hasAttribute('download')) return null;
-
-        const rawHref = anchor.getAttribute('href');
-        if (!rawHref || rawHref.startsWith('#')) return null;
-
-        const targetUrl = new URL(anchor.href, window.location.href);
-        if (targetUrl.origin !== window.location.origin) return null;
-        if (!targetUrl.pathname.endsWith('.html')) return null;
-
-        return targetUrl;
-    }
-
-    document.addEventListener('click', function(event) {
-        if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
-            return;
-        }
-
-        const anchor = event.target.closest('a[href]');
-        const targetUrl = getInternalPageUrl(anchor);
-        if (!targetUrl) return;
-
+    if (event.key === 'Tab' && header?.classList.contains('is-menu-open') && mobileNavigation && menuButton) {
+      const focusable = [menuButton, ...mobileNavigation.querySelectorAll('a, button:not([disabled])')].filter((item) => item.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  });
 
-        if (anchor && event.detail > 0) anchor.blur();
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1050) closeMobileMenu();
+  });
 
-        if (targetUrl.pathname === window.location.pathname && targetUrl.search === window.location.search) {
-            closeDropdowns();
-            closeMobileMenu();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            return;
+  const revealItems = document.querySelectorAll('[data-reveal]');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!('IntersectionObserver' in window) || reducedMotion) {
+    revealItems.forEach((item) => item.classList.add('is-visible'));
+  } else {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    revealItems.forEach((item) => revealObserver.observe(item));
+  }
+
+  const counters = document.querySelectorAll('[data-count]');
+  const animateCounter = (element) => {
+    if (element.dataset.counted === 'true') return;
+    element.dataset.counted = 'true';
+    const target = Number(element.dataset.count || 0);
+    const prefix = element.dataset.prefix || '';
+    const suffix = element.dataset.suffix || '';
+    const duration = 1100;
+    const start = performance.now();
+    const frame = (now) => {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const value = Math.round(target * eased);
+      element.textContent = `${prefix}${value}${suffix}`;
+      if (progress < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  };
+
+  if (counters.length) {
+    if (!('IntersectionObserver' in window) || reducedMotion) counters.forEach(animateCounter);
+    else {
+      const counterObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.45 });
+      counters.forEach((counter) => counterObserver.observe(counter));
+    }
+  }
+
+  const contactForm = document.querySelector('.contact-form[data-endpoint]');
+  if (contactForm) {
+    const status = contactForm.querySelector('.form-status');
+    const submit = contactForm.querySelector('button[type="submit"]');
+    const originalButton = submit?.innerHTML || '';
+
+    contactForm.addEventListener('submit', async (event) => {
+      if (!contactForm.checkValidity()) {
+        event.preventDefault();
+        contactForm.reportValidity();
+        return;
+      }
+
+      event.preventDefault();
+      status?.classList.remove('is-success', 'is-error');
+      if (status) status.textContent = 'Sending securely…';
+      if (submit) {
+        submit.disabled = true;
+        submit.textContent = 'Sending…';
+      }
+
+      try {
+        const response = await fetch(contactForm.dataset.endpoint, {
+          method: 'POST',
+          body: new FormData(contactForm),
+          headers: { Accept: 'application/json' }
+        });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.message || 'The form could not be sent.');
+        contactForm.reset();
+        if (status) {
+          status.textContent = 'Thank you. Your enquiry has been sent.';
+          status.classList.add('is-success');
         }
-
-        closeMobileMenu();
-        navigateTo(targetUrl, true);
-    });
-
-    document.addEventListener('click', function(event) {
-        if (!navMenu.contains(event.target)) {
-            closeDropdowns();
-            closeMobileMenu();
+      } catch (error) {
+        if (status) {
+          status.textContent = 'The inline form could not complete. Opening the secure fallback…';
+          status.classList.add('is-error');
         }
+        window.setTimeout(() => HTMLFormElement.prototype.submit.call(contactForm), 500);
+        return;
+      } finally {
+        if (submit) {
+          submit.disabled = false;
+          submit.innerHTML = originalButton || `Send enquiry ${arrow}`;
+        }
+      }
     });
-
-    document.addEventListener('keydown', function(event) {
-        if (event.key !== 'Escape') return;
-
-        const openToggle = navMenu.querySelector('.nav-dropdown.is-open .nav-dropdown-toggle');
-        const mobileMenuWasOpen = navMenu.classList.contains('mobile-menu-open');
-        closeDropdowns();
-        closeMobileMenu();
-        if (openToggle) openToggle.focus();
-        if (!openToggle && mobileMenuWasOpen && mobileMenuToggle) mobileMenuToggle.focus();
-    });
-
-    window.addEventListener('popstate', function() {
-        navigateTo(new URL(window.location.href), false);
-    });
-
-    window.addEventListener('scroll', requestScrollTick, { passive: true });
-    window.addEventListener('resize', function() {
-        if (window.innerWidth >= 1000) closeMobileMenu();
-    });
-    window.history.scrollRestoration = 'manual';
-    window.history.replaceState({ siteNavigation: true }, '', window.location.href);
-
-    initializeMobileMenu();
-    initializeDropdowns();
-    initializeSoftwareParallax();
-    initializeContactForm();
-    updateNavOnScroll();
-});
+  }
+})();
