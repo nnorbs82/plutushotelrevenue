@@ -46,7 +46,7 @@
             <a class="nav-link${isActive('blog')}" href="blog.html">Journal</a>
           </div>
 
-          <a class="nav-cta" href="contact.html">Discuss your hotel</a>
+          <a class="nav-cta" href="contact.html">Talk to me</a>
           <button class="mobile-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-navigation"><span></span></button>
 
           <div class="mobile-navigation" id="mobile-navigation">
@@ -73,7 +73,7 @@
               </div></div>
             </div>
             <a class="${isActive('blog').trim()}" href="blog.html">Journal</a>
-            <a class="mobile-contact${isActive('contact')}" href="contact.html">Discuss your hotel</a>
+            <a class="mobile-contact${isActive('contact')}" href="contact.html">Talk to me</a>
           </div>
         </nav>
       </header>`;
@@ -89,7 +89,7 @@
               <a class="site-brand footer-site-brand" href="index.html" aria-label="Plutus Hotel Revenue - home">
                 <img class="site-brand-logo" src="logo/logo.png" alt="Plutus Hotel Revenue">
               </a>
-              <p>Straightforward outsourced revenue management and practical commercial guidance for independent hotels.</p>
+              <p>Independent hotel revenue management and practical commercial guidance by Norbert Nica.</p>
               <div class="footer-socials">
                 <a href="https://www.linkedin.com/company/plutushotelrevenue/" target="_blank" rel="noopener noreferrer" aria-label="Plutus on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9v9M6 6.5v.1M10 18v-5c0-2 1.2-3.2 3-3.2s3 1.2 3 3.2v5M10 10v8"/></svg></a>
                 <a href="https://www.facebook.com/plutushotelrevenue/" target="_blank" rel="noopener noreferrer" aria-label="Plutus on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v5h4v-5h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg></a>
@@ -100,7 +100,7 @@
             <div class="footer-column"><strong>Tips &amp; tools</strong><a href="hotel-break-even-calculator.html">Break-even calculator</a><a href="hotel_photoshoot_tips.html">Photography</a><a href="web_design_tips.html">Web design</a><a href="digital_marketing_tips.html">Digital marketing</a></div>
             <div class="footer-column"><strong>Legal</strong><a href="privacy_policy.html">Privacy notice</a><a href="terms_and_conditions.html">Terms</a></div>
           </div>
-          <div class="footer-bottom"><span>© ${currentYear} Plutus Hotel Revenue. All rights reserved.</span><span>Barcelona, Spain · Built for independent hotels</span></div>
+          <div class="footer-bottom"><span>© ${currentYear} Plutus Hotel Revenue. All rights reserved.</span><span>Barcelona, Spain · Independent consultancy by Norbert Nica</span></div>
         </div>
       </footer>`;
   }
