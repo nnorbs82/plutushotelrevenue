@@ -1,5 +1,5 @@
 name: Publish Plutus V9 reframe
-# Exact staged build, final retry
+# Exact staged build, final validation
 
 on:
   push:
@@ -69,8 +69,9 @@ jobs:
               if u.scheme or u.netloc: continue
               if u.path in known_assets: continue
               if u.path and not Path(u.path).exists(): errors.append(f'{name}: broken local ref {ref}')
-          if Path('v9.css').read_text(encoding='utf-8').count('{')!=Path('v9.css').read_text(encoding='utf-8').count('}'): errors.append('v9.css: unbalanced braces')
-          checks={'mews_pms.html':['softwareinformation/mews logo.png','15,000+','1,000+'],'cloudbeds_pms.html':['softwareinformation/cloudbeds logo.jpg','300+','Ask Signals'],'siteminder_chm.html':['softwareinformation/siteminder logo.png','450+','350+']}
+          css=Path('v9.css').read_text(encoding='utf-8')
+          if css.count('{')!=css.count('}'): errors.append('v9.css: unbalanced braces')
+          checks={'mews_pms.html':['softwareinformation/mews logo.png','15,000+','1,000+'],'cloudbeds_pms.html':['softwareinformation/cloudbeds logo.jpg','300+','Groups & Events'],'siteminder_chm.html':['softwareinformation/siteminder logo.png','450+','350+']}
           for page,needles in checks.items():
             text=Path(page).read_text(encoding='utf-8')
             for needle in needles:
