@@ -14,8 +14,7 @@
       <header class="site-header" data-header>
         <nav class="nav-shell" aria-label="Main navigation">
           <a class="site-brand" href="index.html" aria-label="Plutus Hotel Revenue - home">
-            <span class="site-brand-mark"><img src="logo/logo.png" alt=""></span>
-            <span class="site-brand-copy"><strong>PLUTUS</strong><small>Hotel Revenue</small></span>
+            <img class="site-brand-logo" src="logo/logo.png" alt="Plutus Hotel Revenue">
           </a>
 
           <div class="desktop-nav">
@@ -87,9 +86,8 @@
         <div class="shell">
           <div class="footer-main">
             <div class="footer-brand">
-              <a class="site-brand" href="index.html" aria-label="Plutus Hotel Revenue - home">
-                <span class="site-brand-mark"><img src="logo/logo.png" alt=""></span>
-                <span class="site-brand-copy"><strong>PLUTUS</strong><small>Hotel Revenue</small></span>
+              <a class="site-brand footer-site-brand" href="index.html" aria-label="Plutus Hotel Revenue - home">
+                <img class="site-brand-logo" src="logo/logo.png" alt="Plutus Hotel Revenue">
               </a>
               <p>Straightforward outsourced revenue management and practical commercial guidance for independent hotels.</p>
               <div class="footer-socials">
@@ -111,6 +109,7 @@
   const menuButton = document.querySelector('.mobile-menu-toggle');
   const mobileNavigation = document.querySelector('.mobile-navigation');
   const dropdowns = Array.from(document.querySelectorAll('[data-dropdown]'));
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const updateHeader = () => {
     if (header) header.classList.toggle('is-scrolled', window.scrollY > 18);
@@ -207,8 +206,60 @@
     if (window.innerWidth > 1050) closeMobileMenu();
   });
 
+  const heroSlides = Array.from(document.querySelectorAll('.home-hero-slide'));
+  if (heroSlides.length > 1) {
+    const hero = document.querySelector('.home-hero');
+    const current = document.querySelector('.home-hero-current');
+    const total = document.querySelector('.home-hero-total');
+    const progress = document.querySelector('.home-hero-progress span');
+    const previous = document.querySelector('.home-hero-prev');
+    const next = document.querySelector('.home-hero-next');
+    let heroIndex = Math.max(0, heroSlides.findIndex((slide) => slide.classList.contains('is-active')));
+    let heroTimer = null;
+
+    const twoDigits = (number) => String(number).padStart(2, '0');
+    const showHeroSlide = (nextIndex) => {
+      heroIndex = (nextIndex + heroSlides.length) % heroSlides.length;
+      heroSlides.forEach((slide, index) => slide.classList.toggle('is-active', index === heroIndex));
+      if (current) current.textContent = twoDigits(heroIndex + 1);
+      if (total) total.textContent = twoDigits(heroSlides.length);
+      if (progress) progress.style.transform = `scaleX(${(heroIndex + 1) / heroSlides.length})`;
+    };
+
+    const stopHeroTimer = () => {
+      if (heroTimer) window.clearInterval(heroTimer);
+      heroTimer = null;
+    };
+
+    const startHeroTimer = () => {
+      stopHeroTimer();
+      if (!reducedMotion && !document.hidden) {
+        heroTimer = window.setInterval(() => showHeroSlide(heroIndex + 1), 6500);
+      }
+    };
+
+    previous?.addEventListener('click', () => {
+      showHeroSlide(heroIndex - 1);
+      startHeroTimer();
+    });
+    next?.addEventListener('click', () => {
+      showHeroSlide(heroIndex + 1);
+      startHeroTimer();
+    });
+    hero?.addEventListener('mouseenter', stopHeroTimer);
+    hero?.addEventListener('mouseleave', startHeroTimer);
+    hero?.addEventListener('focusin', stopHeroTimer);
+    hero?.addEventListener('focusout', startHeroTimer);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopHeroTimer();
+      else startHeroTimer();
+    });
+
+    showHeroSlide(heroIndex);
+    startHeroTimer();
+  }
+
   const revealItems = document.querySelectorAll('[data-reveal]');
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!('IntersectionObserver' in window) || reducedMotion) {
     revealItems.forEach((item) => item.classList.add('is-visible'));
   } else {
