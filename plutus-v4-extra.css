@@ -1,0 +1,27 @@
+/* Plutus v4 - remaining interior page overrides */
+.page-hero {
+  min-height:0!important;
+  height:auto!important;
+  padding:140px 0 70px!important;
+  background:linear-gradient(135deg,var(--p-sand),var(--p-paper))!important;
+  color:var(--p-ink)!important;
+  overflow:hidden;
+}
+.page-hero::before,.page-hero::after,.page-hero-image,.tips-pattern,.calculator-hero-pattern,.article-hero-pattern{display:none!important}
+.page-hero-content{position:relative!important;z-index:2!important;max-width:980px!important;margin:0 auto!important;text-align:left!important}
+.page-hero-content h1{max-width:900px!important;color:var(--p-ink)!important;font-size:clamp(48px,5.8vw,78px)!important;line-height:1!important;font-weight:500!important;letter-spacing:-.045em!important}
+.page-hero-content h1 em{color:var(--p-teal)!important;font-style:normal!important;font-weight:500!important}
+.page-hero-content>p:last-of-type{max-width:720px!important;color:var(--p-muted)!important;font-size:18px!important;line-height:1.68!important}
+.page-hero .eyebrow-light{color:var(--p-gold-deep)!important}
+.page-hero .button-ghost-light{border-color:var(--p-line)!important;background:#fff!important;color:var(--p-ink)!important}
+.page-hero .button-ghost-light:hover{border-color:var(--p-teal)!important;color:var(--p-teal)!important}
+.software-page .page-hero,.vendor-page .page-hero,.contact-page .page-hero,.blog-page .page-hero{background:linear-gradient(135deg,var(--p-paper) 0%,var(--p-sand) 70%,var(--p-teal-pale) 100%)!important}
+.contact-hero,.software-hero,.blog-hero{min-height:0!important;height:auto!important}
+.section-heading-row{grid-template-columns:.38fr 1.62fr!important;gap:48px!important;margin-bottom:48px!important}
+.section-heading-row h2{font-size:clamp(40px,4.8vw,66px)!important;line-height:1.03!important}
+.section-heading-row>p{margin-top:0!important;font-size:16px!important;line-height:1.65!important;color:var(--p-muted)!important}
+.form-field label,.contact-form label,.legal-layout aside strong,.legal-layout aside a,.vendor-facts span,.software-card small{font-size:14px!important;line-height:1.45!important}
+.contact-form input,.contact-form textarea,.contact-form select{font-size:16px!important}
+.legal-layout article p,.legal-layout article li{font-size:16px!important;line-height:1.68!important}
+.legal-layout article h2{font-size:29px!important}
+@media(max-width:760px){.page-hero{padding:112px 0 54px!important}.page-hero-content h1{font-size:clamp(43px,12vw,60px)!important}.page-hero-content>p:last-of-type{font-size:17px!important}.section-heading-row{display:block!important}}
