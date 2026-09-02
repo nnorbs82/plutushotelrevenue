@@ -1,0 +1,49 @@
+name: Final validate balanced Plutus revision
+
+on:
+  push:
+    branches:
+      - plutus-redesign
+    paths:
+      - '.github/workflows/validate-v3b.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-redesign
+          fetch-depth: 0
+
+      - name: Validate site and calculator
+        run: |
+          python tools/validate_site.py
+          node --check navigation.js
+          node --check calculator.js
+          node - <<'NODE'
+          const calc = require('./calculator.js');
+          const model = calc.calculateModel({
+            currency: 'EUR', rooms: 50, days: 30, adr: 120,
+            variableCost: 22, fixedCost: 70000, currentOccupancy: 65,
+            targetProfit: 0, ancillaryRevenue: 0, otaShare: 0,
+            otaCommission: 15, paymentFee: 0
+          });
+          if (!model.valid) throw new Error(JSON.stringify(model.errors));
+          if (Math.abs(model.breakEvenOccupancy - 47.619047619) > 0.001) throw new Error('Unexpected break-even occupancy');
+          if (Math.abs(model.contributionPerOccupiedRoom - 98) > 0.001) throw new Error('Unexpected contribution');
+          console.log('Calculator regression OK', model.breakEvenOccupancy.toFixed(2));
+          NODE
+
+      - name: Clean temporary validation workflows
+        run: |
+          rm -f .github/workflows/validate-v3.yml .github/workflows/validate-v3b.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: remove temporary v3 validation workflows"
+          git push origin HEAD:plutus-redesign
