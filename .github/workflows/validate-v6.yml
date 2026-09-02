@@ -1,0 +1,36 @@
+name: Validate Plutus v6
+on:
+  push:
+    branches: [plutus-v6-warm]
+    paths: ['.github/workflows/validate-v6.yml']
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v6-warm
+      - name: Check files and scripts
+        run: |
+          test -s v6.css
+          test -s index.html
+          test -s tips.html
+          test -s hotel_photoshoot_tips.html
+          test -s web_design_tips.html
+          test -s digital_marketing_tips.html
+          test -s hotel-break-even-calculator.html
+          test -s calculator-v6.js
+          node --check navigation.js
+          node --check calculator-v6.js
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          pages=['index.html','about.html','revenue_management.html','software.html','tips.html','hotel_photoshoot_tips.html','web_design_tips.html','digital_marketing_tips.html','hotel-break-even-calculator.html','contact.html']
+          for p in pages:
+              text=Path(p).read_text(encoding='utf-8')
+              assert 'v6.css' in text, f'{p}: v6.css missing'
+              assert 'logo/logo.png' in text, f'{p}: logo missing'
+          print('V6 core page validation OK')
+          PY
