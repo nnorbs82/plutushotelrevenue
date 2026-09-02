@@ -1,0 +1,86 @@
+name: Validate Plutus V7
+
+on:
+  push:
+    branches: [plutus-v7-wow]
+    paths: ['.github/workflows/validate-v7.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v7-wow
+          fetch-depth: 0
+      - name: Validate public site
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from html.parser import HTMLParser
+          from urllib.parse import urlsplit
+          import re
+
+          pages = [
+            'index.html','about.html','revenue_management.html','software.html','mews_pms.html',
+            'cloudbeds_pms.html','siteminder_chm.html','tips.html','hotel_photoshoot_tips.html',
+            'web_design_tips.html','digital_marketing_tips.html','hotel-break-even-calculator.html',
+            'blog.html','contact.html','privacy_policy.html','terms_and_conditions.html','404.html'
+          ]
+          errors=[]
+          class P(HTMLParser):
+            def __init__(self): super().__init__(); self.hrefs=[]; self.srcs=[]
+            def handle_starttag(self,tag,attrs):
+              d=dict(attrs)
+              if 'href' in d:self.hrefs.append(d['href'])
+              if 'src' in d:self.srcs.append(d['src'])
+          for name in pages:
+            p=Path(name)
+            if not p.exists(): errors.append(f'missing {name}'); continue
+            text=p.read_text(encoding='utf-8')
+            if 'v7.css' not in text: errors.append(f'{name}: missing v7.css')
+            if 'v7.js' not in text: errors.append(f'{name}: missing v7.js')
+            if 'data-v7-header' not in text or 'data-v7-footer' not in text: errors.append(f'{name}: missing shared header/footer')
+            if name not in {'privacy_policy.html','terms_and_conditions.html','404.html'}:
+              for m in re.finditer(r'\b(we|we\x27re|we\x27ve|we\x27ll|our|ours|us)\b',text,re.I):
+                errors.append(f'{name}: agency-language word {m.group(0)!r}')
+                break
+            parser=P(); parser.feed(text)
+            for ref in parser.hrefs+parser.srcs:
+              if not ref or ref.startswith('#'): continue
+              u=urlsplit(ref)
+              if u.scheme or u.netloc: continue
+              path=u.path
+              if path and not Path(path).exists(): errors.append(f'{name}: broken local ref {ref}')
+          css=Path('v7.css').read_text(encoding='utf-8')
+          if css.count('{')!=css.count('}'): errors.append('v7.css: unbalanced braces')
+          calc=Path('hotel-break-even-calculator.html').read_text(encoding='utf-8')
+          for field in ['rooms','days','adr','variableCost','fixedCost']:
+            if re.search(fr'id="{field}"[^>]*\svalue=',calc): errors.append(f'calculator pre-fills {field}')
+          if errors:
+            raise SystemExit('\n'.join(errors))
+          print('Static site validation passed')
+          PY
+          node --check v7.js
+          node --check calculator-v7-core.js
+          node --check calculator-v7.js
+          node - <<'NODE'
+          const core=require('./calculator-v7-core.js');
+          const m=core.calculate({rooms:50,days:30,adr:120,variableCost:22,fixedCost:70000});
+          if(!m.valid) throw new Error(JSON.stringify(m.errors));
+          if(Math.abs(m.contribution-98)>0.0001) throw new Error('Contribution regression');
+          if(Math.abs(m.beOcc-47.619047619)>0.001) throw new Error('Break-even regression');
+          console.log('Calculator regression passed:', m.beOcc.toFixed(2)+'%');
+          NODE
+      - name: Clean validation workflow
+        run: |
+          rm -f .github/workflows/validate-v7.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: remove temporary V7 validation workflow"
+          git push origin HEAD:plutus-v7-wow
