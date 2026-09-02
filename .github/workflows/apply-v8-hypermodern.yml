@@ -20,9 +20,16 @@ jobs:
           ref: plutus-v8-hypermodern
           fetch-depth: 0
 
-      - name: Verify and extract complete redesign bundle
+      - name: Verify and assemble complete redesign bundle
         run: |
-          base64 -d .v8-bundle.b64 > /tmp/plutus-v8.tgz
+          echo 'ed56f7951e0e569403bfd3771fd4aa6a1cde3b8d5fd0f7cf442caea078b97fe7  .v8/part00' | sha256sum -c -
+          echo '44c2c31c43dbc5bf6260b0a0b5483bf6dfbf8bab27cb1c36d273a5075fd32607  .v8/part01' | sha256sum -c -
+          echo '00f6c54e66ae66be5c4b3aab4656c66b8cbab28c91228c44e855236b5833c645  .v8/part02' | sha256sum -c -
+          echo '6f895943fd5bb9cd9033d9aece518c52b27961a302847620537ef77a31e62898  .v8/part03' | sha256sum -c -
+          echo '19cfd8975633b35a6643bfa027f13cea553e1c231ff73c02fdc795da9dc75bf7  .v8/part04' | sha256sum -c -
+          cat .v8/part00 .v8/part01 .v8/part02 .v8/part03 .v8/part04 > /tmp/plutus-v8.b64
+          test "$(wc -c < /tmp/plutus-v8.b64)" -eq 33544
+          base64 -d /tmp/plutus-v8.b64 > /tmp/plutus-v8.tgz
           echo 'd856ceb47fbb8e7ee6929056764bd769cf2b90bc5a30dda2ac39b8c6068d07df  /tmp/plutus-v8.tgz' | sha256sum -c -
           tar -xzf /tmp/plutus-v8.tgz
 
@@ -93,7 +100,7 @@ jobs:
 
       - name: Commit clean V8 branch
         run: |
-          rm -f .v8-bundle.b64 .github/workflows/apply-v8-hypermodern.yml
+          rm -rf .v8 .v8-bundle.b64 .github/workflows/apply-v8-hypermodern.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
