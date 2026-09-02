@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hotel Break-even Calculator | Plutus</title>
+  <meta name="description" content="Calculate hotel break-even occupancy and occupied room nights using five core inputs.">
+  <meta name="theme-color" content="#08090B">
+  <link rel="icon" href="logo/logo.png" type="image/png">
+  <link rel="canonical" href="https://plutushotelrevenue.com/calculator.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="v8.css?v=20260902">
+  <script defer src="v8.js?v=20260902"></script>
+</head>
+<body class="page-calculator" data-page="calculator">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div data-v8-header></div>
+  <main id="main-content">
+<section class="calc-hero"><div class="shell calc-hero-grid"><div data-reveal><p class="eyebrow">Free planning tool</p><h1>Break-even,<br>made visible.</h1></div><div data-reveal><p>No pre-filled hotel data. Start with five figures and see the occupancy and occupied room nights needed to cover the period's costs.</p></div></div></section>
+<section class="calc-app" data-v8-calculator><div class="shell calc-layout"><form class="calc-panel" novalidate><p class="eyebrow">Core inputs</p><h2>Your hotel</h2><p>Examples appear only as placeholders. The calculator does not load a sample property.</p><label class="calc-field"><span>Currency</span><select id="currency"><option>EUR</option><option>GBP</option><option>USD</option><option>CHF</option><option>RON</option><option>CAD</option><option>AUD</option></select></label><label class="calc-field"><span>Number of rooms</span><input id="rooms" type="number" min="1" placeholder="e.g. 50"></label><label class="calc-field"><span>Days in period</span><input id="days" type="number" min="1" max="366" placeholder="e.g. 30"></label><label class="calc-field"><span>ADR</span><input id="adr" type="number" min="0" step="0.01" placeholder="e.g. 120"></label><label class="calc-field"><span>Variable cost per occupied room</span><input id="variableCost" type="number" min="0" step="0.01" placeholder="e.g. 22"></label><label class="calc-field"><span>Fixed costs for the period</span><input id="fixedCost" type="number" min="0" step="100" placeholder="e.g. 70000"></label><details class="calc-details"><summary>Scenario - optional</summary><div class="calc-two"><label class="calc-field"><span>Expected occupancy %</span><input id="currentOccupancy" type="number" min="0" max="100" placeholder="65"></label><label class="calc-field"><span>Target profit</span><input id="targetProfit" type="number" min="0" placeholder="10000"></label></div></details><details class="calc-details"><summary>Distribution - optional</summary><div class="calc-two"><label class="calc-field"><span>Other revenue / room</span><input id="ancillaryRevenue" type="number" min="0" placeholder="12"></label><label class="calc-field"><span>OTA share %</span><input id="otaShare" type="number" min="0" max="100" placeholder="45"></label><label class="calc-field"><span>OTA commission %</span><input id="otaCommission" type="number" min="0" max="100" placeholder="17"></label><label class="calc-field"><span>Payment fee %</span><input id="paymentFee" type="number" min="0" max="100" placeholder="1.5"></label></div></details><div id="calcError" hidden style="margin-top:16px;background:#ffe8e1;color:#8b3a2c;border-radius:12px;padding:12px;font-size:14px"></div></form><section class="calc-results"><div class="calc-primary"><span>Break-even occupancy</span><strong id="beOcc">-</strong><p>Your result appears as soon as the five core numbers are valid.</p><div class="calc-meter"><i id="beMeter"></i></div></div><div class="calc-stat-grid"><div class="calc-stat"><span>Break-even room nights</span><strong id="beNights">-</strong></div><div class="calc-stat"><span>Contribution / occupied room</span><strong id="contribution">-</strong></div><div class="calc-stat"><span>Projected result</span><strong id="currentProfit">-</strong></div><div class="calc-stat"><span>Target-profit occupancy</span><strong id="targetOcc">-</strong></div></div><div class="calc-chart"><svg id="beChart" viewBox="0 0 700 260" aria-label="Revenue and total cost by occupancy"></svg></div></section></div></section>
+  </main>
+  <div data-v8-footer></div>
+  <script src="calculator-v8-core.js?v=20260902"></script><script src="calculator-v8.js?v=20260902"></script>
+</body>
+</html>
