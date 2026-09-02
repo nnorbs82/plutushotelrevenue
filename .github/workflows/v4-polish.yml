@@ -1,0 +1,102 @@
+name: Apply Plutus v4 polish
+on:
+  push:
+    branches: [plutus-v4-real-preview]
+    paths: ['.github/workflows/v4-polish.yml']
+permissions:
+  contents: write
+jobs:
+  polish:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v4-real-preview
+          fetch-depth: 0
+      - name: Apply copy and visual polish
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          nav = Path('navigation.js')
+          text = nav.read_text(encoding='utf-8')
+          text = text.replace('Discuss your hotel', 'Talk to me')
+          text = text.replace('Straightforward outsourced revenue management and practical commercial guidance for independent hotels.', 'Independent hotel revenue management and practical commercial guidance by Norbert Nica.')
+          text = text.replace('Barcelona, Spain · Built for independent hotels', 'Barcelona, Spain · Independent consultancy by Norbert Nica')
+          nav.write_text(text, encoding='utf-8')
+
+          privacy = Path('privacy_policy.html')
+          text = privacy.read_text(encoding='utf-8')
+          text = text.replace('2. Data we collect', '2. Data collected')
+          text = text.replace('When you use the contact form, we collect the information you choose to provide', 'When you use the contact form, Plutus collects the information you choose to provide')
+          text = text.replace('3. Why we process it', '3. Why the information is processed')
+          privacy.write_text(text, encoding='utf-8')
+
+          css = Path('plutus-v4.css')
+          addition = r'''
+
+/* V4 treatment for remaining legacy interior-page structures */
+.page-hero {
+  min-height:0!important;
+  height:auto!important;
+  padding:140px 0 70px!important;
+  background:linear-gradient(135deg,var(--p-sand),var(--p-paper))!important;
+  color:var(--p-ink)!important;
+  overflow:hidden;
+}
+.page-hero::before,.page-hero::after,.page-hero-image,.tips-pattern,.calculator-hero-pattern,.article-hero-pattern{display:none!important}
+.page-hero-content{position:relative!important;z-index:2!important;max-width:980px!important;margin:0 auto!important;text-align:left!important}
+.page-hero-content h1{max-width:900px!important;color:var(--p-ink)!important;font-size:clamp(48px,5.8vw,78px)!important;line-height:1!important;font-weight:500!important;letter-spacing:-.045em!important}
+.page-hero-content h1 em{color:var(--p-teal)!important;font-style:normal!important;font-weight:500!important}
+.page-hero-content>p:last-of-type{max-width:720px!important;color:var(--p-muted)!important;font-size:18px!important;line-height:1.68!important}
+.page-hero .eyebrow-light{color:var(--p-gold-deep)!important}
+.page-hero .button-ghost-light{border-color:var(--p-line)!important;background:#fff!important;color:var(--p-ink)!important}
+.page-hero .button-ghost-light:hover{border-color:var(--p-teal)!important;color:var(--p-teal)!important}
+
+.software-page .page-hero,.vendor-page .page-hero,.contact-page .page-hero,.blog-page .page-hero{background:linear-gradient(135deg,var(--p-paper) 0%,var(--p-sand) 70%,var(--p-teal-pale) 100%)!important}
+.contact-hero,.software-hero,.blog-hero{min-height:0!important;height:auto!important}
+
+.section-heading-row{grid-template-columns:.38fr 1.62fr!important;gap:48px!important;margin-bottom:48px!important}
+.section-heading-row h2{font-size:clamp(40px,4.8vw,66px)!important;line-height:1.03!important}
+.section-heading-row>p{margin-top:0!important;font-size:16px!important;line-height:1.65!important;color:var(--p-muted)!important}
+
+.form-field label,.contact-form label,.legal-layout aside strong,.legal-layout aside a,.vendor-facts span,.software-card small{font-size:14px!important;line-height:1.45!important}
+.contact-form input,.contact-form textarea,.contact-form select{font-size:16px!important}
+.legal-layout article p,.legal-layout article li{font-size:16px!important;line-height:1.68!important}
+.legal-layout article h2{font-size:29px!important}
+
+@media(max-width:760px){
+  .page-hero{padding:112px 0 54px!important}
+  .page-hero-content h1{font-size:clamp(43px,12vw,60px)!important}
+  .page-hero-content>p:last-of-type{font-size:17px!important}
+  .section-heading-row{display:block!important}
+}
+'''
+          if 'V4 treatment for remaining legacy interior-page structures' not in css.read_text(encoding='utf-8'):
+              css.write_text(css.read_text(encoding='utf-8') + addition, encoding='utf-8')
+          PY
+      - name: Audit copy and validate
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          bad=[]
+          pat=re.compile(r'\b(we|we\x27re|we\x27ll|we\x27ve|our|ours|us)\b',re.I)
+          for path in sorted(list(Path('.').glob('*.html'))+[Path('navigation.js')]):
+              for n,line in enumerate(path.read_text(encoding='utf-8').splitlines(),1):
+                  if pat.search(line): bad.append(f'{path}:{n}: {line.strip()}')
+          if bad:
+              print('\n'.join(bad)); raise SystemExit(1)
+          print('Solo-copy audit passed.')
+          PY
+          node --check navigation.js
+          node --check calculator.js
+      - name: Commit polish
+        run: |
+          rm -f .github/workflows/solo-language-audit.yml .github/workflows/v4-copy-audit.yml .github/workflows/v4-polish.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "style: finish Plutus v4 solo-consultancy direction"
+          git push origin HEAD:plutus-v4-real-preview
