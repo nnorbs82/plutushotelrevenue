@@ -1,0 +1,24 @@
+name: Audit Plutus v4 copy
+on:
+  push:
+    branches: [plutus-v4-real-preview]
+    paths: ['.github/workflows/v4-copy-audit.yml']
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v4-real-preview
+      - name: Print agency-language matches
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          pat = re.compile(r'\b(we|we\x27re|we\x27ll|we\x27ve|our|ours|us)\b', re.I)
+          for path in sorted(list(Path('.').glob('*.html')) + [Path('navigation.js')]):
+              for n,line in enumerate(path.read_text(encoding='utf-8').splitlines(),1):
+                  if pat.search(line): print(f'{path}:{n}: {line.strip()}')
+          PY
