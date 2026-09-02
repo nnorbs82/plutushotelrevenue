@@ -1,0 +1,56 @@
+name: Finalize Plutus v4
+on:
+  push:
+    branches: [plutus-v4-real-preview]
+    paths: ['.github/workflows/v4-finalize.yml']
+permissions:
+  contents: write
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v4-real-preview
+          fetch-depth: 0
+      - name: Apply final changes
+        run: |
+          grep -q 'plutus-v4-extra.css' plutus-v4.css || sed -i '1i @import url("plutus-v4-extra.css?v=20260902e");' plutus-v4.css
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('navigation.js'); t=p.read_text(encoding='utf-8')
+          t=t.replace('Discuss your hotel','Talk to me')
+          t=t.replace('Straightforward outsourced revenue management and practical commercial guidance for independent hotels.','Independent hotel revenue management and practical commercial guidance by Norbert Nica.')
+          t=t.replace('Barcelona, Spain · Built for independent hotels','Barcelona, Spain · Independent consultancy by Norbert Nica')
+          p.write_text(t,encoding='utf-8')
+          p=Path('privacy_policy.html'); t=p.read_text(encoding='utf-8')
+          t=t.replace('2. Data we collect','2. Data collected')
+          t=t.replace('When you use the contact form, we collect the information you choose to provide','When you use the contact form, Plutus collects the information you choose to provide')
+          t=t.replace('3. Why we process it','3. Why the information is processed')
+          p.write_text(t,encoding='utf-8')
+          PY
+      - name: Validate
+        run: |
+          node --check navigation.js
+          node --check calculator.js
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          pat=re.compile(r'\b(we|we\x27re|we\x27ll|we\x27ve|our|ours|us)\b',re.I)
+          hits=[]
+          for path in sorted(list(Path('.').glob('*.html'))+[Path('navigation.js')]):
+              for n,line in enumerate(path.read_text(encoding='utf-8').splitlines(),1):
+                  if pat.search(line): hits.append(f'{path}:{n}: {line.strip()}')
+          if hits:
+              print('\n'.join(hits)); raise SystemExit(1)
+          print('Solo-copy audit passed.')
+          PY
+      - name: Commit
+        run: |
+          rm -f .github/workflows/solo-language-audit.yml .github/workflows/v4-copy-audit.yml .github/workflows/v4-polish.yml .github/workflows/v4-finalize.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "style: finalize Plutus v4 preview"
+          git push origin HEAD:plutus-v4-real-preview
