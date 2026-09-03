@@ -28,7 +28,7 @@ jobs:
           npx playwright install chromium --with-deps >/dev/null 2>&1
       - name: Render Bubble site and capture content
         run: |
-          cat > /tmp/inspect.mjs <<'NODE'
+          cat > inspect.mjs <<'NODE'
           import { chromium } from 'playwright';
           import fs from 'fs';
           const browser = await chromium.launch({headless:true});
@@ -58,11 +58,11 @@ jobs:
           }
           await browser.close();
           NODE
-          node /tmp/inspect.mjs
+          node inspect.mjs
       - name: Commit text captures only
         run: |
           find .bubble-inspect -type f -name '*.png' -delete
-          rm -f package.json package-lock.json
+          rm -f package.json package-lock.json inspect.mjs
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add .bubble-inspect
