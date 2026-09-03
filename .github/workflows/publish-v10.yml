@@ -1,4 +1,5 @@
 name: Publish Plutus V10 welcoming modern redesign
+# Retry after exact part00 repair
 
 on:
   push:
