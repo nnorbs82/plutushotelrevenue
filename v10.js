@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 const addStyle=(href)=>{if(!document.querySelector(`link[href^="${href}"]`)){const l=document.createElement('link');l.rel='stylesheet';l.href=href+'?v=20260903';document.head.appendChild(l)}};
-addStyle('v15.css');addStyle('v16.css');addStyle('v17.css');
+addStyle('v15.css');addStyle('v16.css');addStyle('v17.css');addStyle('v17-articles.css');
 if(!document.querySelector('script[src^="v17.js"]')){const s=document.createElement('script');s.src='v17.js?v=20260903';s.defer=true;document.head.appendChild(s)}
 const header=document.querySelector('[data-v10-header]');
 const footer=document.querySelector('[data-v10-footer]');
