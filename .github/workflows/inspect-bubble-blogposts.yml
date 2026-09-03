@@ -1,0 +1,78 @@
+name: Inspect legacy Bubble blog articles
+
+on:
+  push:
+    branches:
+      - plutus-v9-reframe
+    paths:
+      - '.github/workflows/inspect-bubble-blogposts.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  inspect-blog:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v9-reframe
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install chromium --with-deps >/dev/null 2>&1
+      - name: Capture article pages
+        run: |
+          cat > inspect-blog.mjs <<'NODE'
+          import { chromium } from 'playwright';
+          import fs from 'fs';
+          fs.mkdirSync('.bubble-inspect/blogposts',{recursive:true});
+          const browser=await chromium.launch({headless:true});
+          const base='https://polibri-57297.bubbleapps.io/version-test/?debug_mode=true';
+          const titles=[
+            ['travel-trends-2025','Travel Trends for the Year 2025'],
+            ['direct-bookings','How to Attract More Direct Hotel Bookings'],
+            ['tourism-global-warming','Tourism and Global Warming: A Delicate Balance'],
+            ['europe-travel-2024','Travel Trends for Europe in 2024: Embracing Sustainability, Technology, and Authentic Experiences']
+          ];
+          const report=[];
+          for(const [slug,title] of titles){
+            const p=await browser.newPage({viewport:{width:1440,height:1200}});
+            try{
+              await p.goto(base,{waitUntil:'networkidle',timeout:120000});
+              await p.waitForTimeout(3000);
+              const blog=p.getByText('BLOG',{exact:true});
+              const bc=await blog.count();
+              for(let i=bc-1;i>=0;i--){if(await blog.nth(i).isVisible()){await blog.nth(i).click();break;}}
+              await p.waitForTimeout(4000);
+              const match=p.getByText(title,{exact:true});
+              const count=await match.count();
+              let clicked=false;
+              for(let i=count-1;i>=0;i--){
+                try{if(await match.nth(i).isVisible()){await match.nth(i).click();clicked=true;break;}}catch{}
+              }
+              if(clicked){await p.waitForTimeout(5000);try{await p.waitForLoadState('networkidle',{timeout:30000});}catch{}}
+              const text=await p.locator('body').innerText();
+              fs.writeFileSync(`.bubble-inspect/blogposts/${slug}.txt`,text);
+              fs.writeFileSync(`.bubble-inspect/blogposts/${slug}.html`,await p.content());
+              report.push({slug,title,count,url:p.url(),chars:text.length});
+            }catch(e){report.push({slug,title,error:e.message,url:p.url()});}
+            await p.close();
+          }
+          fs.writeFileSync('.bubble-inspect/blogposts/report.json',JSON.stringify(report,null,2));
+          await browser.close();
+          NODE
+          node inspect-blog.mjs
+      - name: Commit captures
+        run: |
+          rm -f package.json package-lock.json inspect-blog.mjs
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .bubble-inspect/blogposts
+          git commit -m 'chore: capture legacy Bubble blog articles'
+          git push origin HEAD:plutus-v9-reframe
