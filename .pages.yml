@@ -1,0 +1,69 @@
+media:
+  - name: blog_images
+    label: Blog images
+    input: blog/media
+    output: /blog/media
+    rename: safe
+    extensions: [png, jpg, jpeg, webp]
+
+content:
+  - name: blog_posts
+    label: Blog Posts
+    type: collection
+    path: content/blog
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{title}.md"
+      field: create
+    view:
+      primary: title
+      fields: [date, category, published, featured]
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Publication date
+        type: date
+        required: true
+      - name: category
+        label: Category
+        type: string
+        required: true
+      - name: excerpt
+        label: Excerpt
+        type: text
+        required: true
+        description: Short summary used on the Blog archive and homepage.
+      - name: cover
+        label: Cover image
+        type: image
+        options:
+          media: blog_images
+      - name: featured
+        label: Feature on homepage
+        type: boolean
+      - name: published
+        label: Published
+        type: boolean
+      - name: body
+        label: Article
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: blog_images
+          path: blog/media
+          rename: safe
+          switcher: true
+
+settings:
+  commit:
+    identity: user
+    templates:
+      create: "content(blog): add {filename}"
+      update: "content(blog): update {filename}"
+      delete: "content(blog): remove {filename}"
