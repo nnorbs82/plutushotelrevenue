@@ -1,5 +1,5 @@
 name: Publish Plutus V10 welcoming modern redesign
-# Final validation with reproducible Blog output check
+# Final publication - workflow file added separately after validated site commit
 
 on:
   push:
@@ -154,7 +154,7 @@ jobs:
 
           python - <<'PY'
           from pathlib import Path
-          import hashlib, json, subprocess
+          import hashlib, subprocess
           targets=[Path('blog.html'),Path('index.html'),Path('sitemap.xml'),*sorted(Path('.').glob('blog-*.html'))]
           def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
           before={str(p):digest(p) for p in targets}
@@ -166,9 +166,10 @@ jobs:
           print('Blog generator reproducibility passed for',len(targets),'generated files')
           PY
 
-      - name: Commit clean V10 review branch
+      - name: Commit validated V10 site
         run: |
-          rm -rf .v10 .github/workflows/publish-v10.yml
+          rm -rf .v10
+          rm -f .github/workflows/build-blog.yml
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
