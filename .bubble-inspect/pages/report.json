@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "photo",
+    "label": "Hotel Photoshoot",
+    "count": 1,
+    "before": "https://polibri-57297.bubbleapps.io/version-test/",
+    "after": "https://polibri-57297.bubbleapps.io/version-test/hotel_photoshoot_tips",
+    "title": "Hotel Photoshoot Tips",
+    "chars": 11951
+  },
+  {
+    "slug": "web",
+    "label": "Web Design",
+    "count": 1,
+    "before": "https://polibri-57297.bubbleapps.io/version-test/",
+    "after": "https://polibri-57297.bubbleapps.io/version-test/web_design_tips",
+    "title": "Web Design Tips",
+    "chars": 6750
+  },
+  {
+    "slug": "marketing",
+    "label": "Digital Marketing",
+    "count": 1,
+    "before": "https://polibri-57297.bubbleapps.io/version-test/",
+    "after": "https://polibri-57297.bubbleapps.io/version-test/digital_marketing",
+    "title": "Digital Marketing Tips",
+    "chars": 4191
+  },
+  {
+    "slug": "blog",
+    "label": "BLOG",
+    "count": 1,
+    "before": "https://polibri-57297.bubbleapps.io/version-test/",
+    "after": "https://polibri-57297.bubbleapps.io/version-test/all_blog_posts",
+    "title": "All Blog Posts",
+    "chars": 2683
+  },
+  {
+    "slug": "tips",
+    "label": "TIPS",
+    "count": 1,
+    "before": "https://polibri-57297.bubbleapps.io/version-test/",
+    "after": "https://polibri-57297.bubbleapps.io/version-test/",
+    "title": "Plutus - Hotel Revenue Management",
+    "chars": 3258
+  }
+]
