@@ -1,5 +1,5 @@
 name: Publish Plutus V10 welcoming modern redesign
-# Final validation after exact bundle repair
+# Final validation with reproducible Blog output check
 
 on:
   push:
@@ -152,13 +152,19 @@ jobs:
           console.log('Calculator regression passed:',m.beOcc.toFixed(2)+'%');
           NODE
 
-          python tools/build_blog.py
-          if ! git diff --quiet -- blog.html 'blog-*.html' index.html sitemap.xml; then
-            echo 'Blog builder produced uncommitted differences:'
-            git diff -- blog.html 'blog-*.html' index.html sitemap.xml
-            exit 1
-          fi
-          echo 'Blog generator reproducibility passed'
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib, json, subprocess
+          targets=[Path('blog.html'),Path('index.html'),Path('sitemap.xml'),*sorted(Path('.').glob('blog-*.html'))]
+          def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+          before={str(p):digest(p) for p in targets}
+          subprocess.run(['python','tools/build_blog.py'],check=True)
+          after={str(p):digest(p) for p in targets}
+          if before != after:
+            changed=[k for k in before if before[k]!=after.get(k)]
+            raise SystemExit('Blog builder is not reproducible; changed: '+', '.join(changed))
+          print('Blog generator reproducibility passed for',len(targets),'generated files')
+          PY
 
       - name: Commit clean V10 review branch
         run: |
