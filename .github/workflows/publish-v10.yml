@@ -1,5 +1,5 @@
 name: Publish Plutus V10 welcoming modern redesign
-# Retry after exact part00 repair
+# Final validation after exact bundle repair
 
 on:
   push:
@@ -97,7 +97,7 @@ jobs:
             if not Path(required).exists(): errors.append(f'missing Blog/CMS component {required}')
 
           tips_checks = {
-            'hotel_photoshoot_tips.html':['Scout the location','atmosphere','equipment','natural light','visual story','composition','amenities','editing','night','RAW','Legal'],
+            'hotel_photoshoot_tips.html':['Scout the location','atmosphere','equipment','natural and artificial light','visual story','composition','amenities','editing','after dark','RAW','usage rights'],
             'web_design_tips.html':['User experience','Visual','booking','Social proof','SEO','Security','content','technology'],
             'digital_marketing_tips.html':['SEO','communication','customer experience','cost','measure','Social','Email','paid']
           }
