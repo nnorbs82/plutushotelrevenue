@@ -1,10 +1,11 @@
 (()=>{
 'use strict';
 const addStyle=(href)=>{if(!document.querySelector(`link[href^="${href}"]`)){const l=document.createElement('link');l.rel='stylesheet';l.href=href+'?v=20260903';document.head.appendChild(l)}};
-addStyle('v15.css');addStyle('v16.css');addStyle('v17.css');addStyle('v17-articles.css');addStyle('v18.css');addStyle('v19.css');addStyle('v19-reading.css');addStyle('v20.css');
+addStyle('v15.css');addStyle('v16.css');addStyle('v17.css');addStyle('v17-articles.css');addStyle('v18.css');addStyle('v19.css');addStyle('v19-reading.css');addStyle('v20.css');addStyle('v21.css');
 if(!document.querySelector('script[src^="v17.js"]')){const s=document.createElement('script');s.src='v17.js?v=20260903';s.defer=true;document.head.appendChild(s)}
 if(!document.querySelector('script[src^="v19.js"]')){const s=document.createElement('script');s.src='v19.js?v=20260903';s.defer=true;document.head.appendChild(s)}
 if(!document.querySelector('script[src^="v20.js"]')){const s=document.createElement('script');s.src='v20.js?v=20260903';s.defer=true;document.head.appendChild(s)}
+if(!document.querySelector('script[src^="v21.js"]')){const s=document.createElement('script');s.src='v21.js?v=20260903';s.defer=true;document.head.appendChild(s)}
 const header=document.querySelector('[data-v10-header]');
 const footer=document.querySelector('[data-v10-footer]');
 if(header){header.innerHTML=`<header class="v15-header"><div class="v15-nav">
