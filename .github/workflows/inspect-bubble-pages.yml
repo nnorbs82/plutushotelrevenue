@@ -1,0 +1,90 @@
+name: Inspect legacy Bubble content pages
+
+on:
+  push:
+    branches:
+      - plutus-v9-reframe
+    paths:
+      - '.github/workflows/inspect-bubble-pages.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  inspect-pages:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v9-reframe
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install chromium --with-deps >/dev/null 2>&1
+      - name: Navigate legacy content
+        run: |
+          cat > inspect-pages.mjs <<'NODE'
+          import { chromium } from 'playwright';
+          import fs from 'fs';
+          fs.mkdirSync('.bubble-inspect/pages',{recursive:true});
+          const browser=await chromium.launch({headless:true});
+          const base='https://polibri-57297.bubbleapps.io/version-test/?debug_mode=true';
+          const targets=[
+            ['photo','Hotel Photoshoot'],
+            ['web','Web Design'],
+            ['marketing','Digital Marketing'],
+            ['blog','BLOG'],
+            ['tips','TIPS']
+          ];
+          const report=[];
+          for(const [slug,label] of targets){
+            const p=await browser.newPage({viewport:{width:1440,height:1200}});
+            try{
+              await p.goto(base,{waitUntil:'networkidle',timeout:120000});
+              await p.waitForTimeout(3500);
+              const matches=p.getByText(label,{exact:true});
+              const count=await matches.count();
+              report.push({slug,label,count,before:p.url()});
+              if(count){
+                let clicked=false;
+                for(let i=count-1;i>=0;i--){
+                  try{
+                    const el=matches.nth(i);
+                    if(await el.isVisible()){
+                      await el.click({timeout:10000});
+                      clicked=true;
+                      break;
+                    }
+                  }catch{}
+                }
+                if(clicked){
+                  await p.waitForTimeout(5000);
+                  try{await p.waitForLoadState('networkidle',{timeout:30000});}catch{}
+                }
+              }
+              const text=await p.locator('body').innerText();
+              fs.writeFileSync(`.bubble-inspect/pages/${slug}.txt`,text);
+              fs.writeFileSync(`.bubble-inspect/pages/${slug}.html`,await p.content());
+              report[report.length-1].after=p.url();
+              report[report.length-1].title=await p.title();
+              report[report.length-1].chars=text.length;
+            }catch(e){report.push({slug,label,error:e.message,url:p.url()});}
+            await p.close();
+          }
+          fs.writeFileSync('.bubble-inspect/pages/report.json',JSON.stringify(report,null,2));
+          await browser.close();
+          NODE
+          node inspect-pages.mjs
+      - name: Commit text captures
+        run: |
+          rm -f package.json package-lock.json inspect-pages.mjs
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .bubble-inspect/pages
+          git commit -m 'chore: capture legacy Bubble tips and blog content'
+          git push origin HEAD:plutus-v9-reframe
