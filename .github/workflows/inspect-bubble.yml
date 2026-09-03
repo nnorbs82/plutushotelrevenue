@@ -1,0 +1,70 @@
+name: Inspect legacy Bubble site
+
+on:
+  push:
+    branches:
+      - plutus-v9-reframe
+    paths:
+      - '.github/workflows/inspect-bubble.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: plutus-v9-reframe
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser tooling
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install chromium --with-deps >/dev/null 2>&1
+      - name: Render Bubble site and capture content
+        run: |
+          cat > /tmp/inspect.mjs <<'NODE'
+          import { chromium } from 'playwright';
+          import fs from 'fs';
+          const browser = await chromium.launch({headless:true});
+          const page = await browser.newPage({viewport:{width:1440,height:1200}});
+          const url='https://polibri-57297.bubbleapps.io/version-test/?debug_mode=true';
+          await page.goto(url,{waitUntil:'networkidle',timeout:120000});
+          await page.waitForTimeout(5000);
+          fs.mkdirSync('.bubble-inspect',{recursive:true});
+          fs.writeFileSync('.bubble-inspect/home.html',await page.content());
+          fs.writeFileSync('.bubble-inspect/home.txt',await page.locator('body').innerText());
+          await page.screenshot({path:'.bubble-inspect/home.png',fullPage:true});
+          const links = await page.locator('a').evaluateAll(as=>as.map(a=>({text:(a.innerText||'').trim(),href:a.href})).filter(x=>x.text||x.href));
+          fs.writeFileSync('.bubble-inspect/links.json',JSON.stringify(links,null,2));
+          const candidates = links.filter(x=>/tip|photo|web|market|blog/i.test((x.text||'')+' '+(x.href||'')));
+          for (let i=0;i<candidates.length;i++) {
+            const x=candidates[i];
+            try {
+              const p=await browser.newPage({viewport:{width:1440,height:1200}});
+              await p.goto(x.href,{waitUntil:'networkidle',timeout:120000});
+              await p.waitForTimeout(3500);
+              const safe=('page-'+i+'-'+(x.text||'link')).replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').slice(0,80);
+              fs.writeFileSync(`.bubble-inspect/${safe}.txt`,await p.locator('body').innerText());
+              fs.writeFileSync(`.bubble-inspect/${safe}.html`,await p.content());
+              await p.screenshot({path:`.bubble-inspect/${safe}.png`,fullPage:true});
+              await p.close();
+            } catch(e) { console.log('candidate failed',x.href,e.message); }
+          }
+          await browser.close();
+          NODE
+          node /tmp/inspect.mjs
+      - name: Commit text captures only
+        run: |
+          find .bubble-inspect -type f -name '*.png' -delete
+          rm -f package.json package-lock.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .bubble-inspect
+          git commit -m 'chore: capture legacy Bubble site text for redesign research'
+          git push origin HEAD:plutus-v9-reframe
