@@ -1,0 +1,44 @@
+name: Expand Plutus redesign bundle
+
+on:
+  push:
+    branches:
+      - plutus-redesign
+    paths:
+      - '.redesign/parts/**'
+      - '.github/workflows/expand-plutus-redesign.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  expand:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out redesign branch
+        uses: actions/checkout@v4
+        with:
+          ref: plutus-redesign
+          fetch-depth: 0
+
+      - name: Expand reviewed redesign bundle
+        run: |
+          cat .redesign/parts/* | base64 -d > /tmp/plutus-site.tar.xz
+          tar -xJf /tmp/plutus-site.tar.xz -C .
+          rm -rf .redesign
+          rm -f .github/workflows/expand-plutus-redesign.yml
+
+      - name: Validate generated website
+        run: |
+          python tools/validate_site.py
+          node --check navigation.js
+          node --check calculator.js
+
+      - name: Commit generated website
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: redesign Plutus website and add hotel break-even calculator"
+          git push origin HEAD:plutus-redesign
