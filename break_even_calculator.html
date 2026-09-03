@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Hotel Break-even Calculator - Plutus Hotel Revenue</title>
+  <meta name="description" content="Free comprehensive hotel break-even calculator with occupancy, ADR, fixed costs, variable room costs, commissions, profit scenarios and interactive graph.">
+  <meta name="theme-color" content="#111315">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260903-redesign">
+  
+</head>
+<body class="tool-page">
+
+<header class="site-header" data-header>
+  <a class="brand" href="index.html" aria-label="Plutus Hotel Revenue home">
+    <img src="logo/plutus-mark.svg" alt="" class="brand-mark">
+    <span class="brand-copy"><strong>PLUTUS</strong><span>HOTEL REVENUE</span></span>
+  </a>
+
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" aria-label="Open navigation">
+    <span></span><span></span>
+  </button>
+
+  <nav class="site-nav" id="site-navigation" aria-label="Primary navigation">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="revenue_management.html">Revenue management</a>
+
+    <div class="nav-group">
+      <button class="nav-group-toggle" type="button" aria-expanded="false">Software <span aria-hidden="true">+</span></button>
+      <div class="nav-panel">
+        <a href="software.html"><strong>Hotel software</strong><small>Tools Plutus knows and works with</small></a>
+        <a href="mews_pms.html">Mews PMS</a>
+        <a href="cloudbeds_pms.html">Cloudbeds PMS</a>
+        <a href="siteminder_chm.html">SiteMinder</a>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <button class="nav-group-toggle" type="button" aria-expanded="false">Tips <span aria-hidden="true">+</span></button>
+      <div class="nav-panel nav-panel-wide">
+        <a href="break_even_calculator.html" class="nav-feature">
+          <span class="nav-feature-kicker">Free hotel tool</span>
+          <strong>Break-even calculator</strong>
+          <small>Find the occupancy and ADR your hotel needs to cover costs.</small>
+        </a>
+        <a href="tips.html"><strong>Tips & insights</strong><small>Practical resources for independent hotels</small></a>
+        <a href="hotel_photoshoot_tips.html">Hotel photoshoot tips</a>
+        <a href="web_design_tips.html">Web design tips</a>
+        <a href="digital_marketing_tips.html">Digital marketing</a>
+      </div>
+    </div>
+
+    <a href="blog.html">Blog</a>
+    <a href="contact.html" class="nav-cta">Let's talk</a>
+  </nav>
+</header>
+
+
+<main class="tool-page">
+  <section class="tool-hero">
+    <div class="tool-hero-grid">
+      <div>
+        <span class="eyebrow">Free hotel finance tool</span>
+        <h1>Hotel break-even calculator.</h1>
+      </div>
+      <div>
+        <p>Find the occupancy, occupied rooms and ADR your hotel needs to cover operating costs. Build a realistic cost base, include commissions and variable room costs, then test performance across different occupancy levels.</p>
+        <div class="tool-trust">
+          <span>No sign-up</span>
+          <span>Runs in your browser</span>
+          <span>Your inputs stay on your device</span>
+          <span>Monthly or custom period</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="calculator-wrap">
+    <div class="calculator-layout">
+      <form class="calc-inputs" data-break-even-form onsubmit="return false;">
+        <div class="calc-panel">
+          <div class="calc-panel-heading"><h2>Property & period</h2><span>Start here</span></div>
+          <div class="calc-field-grid">
+            <div class="calc-field">
+              <label for="currency">Currency</label>
+              <select id="currency">
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - Pound</option>
+                <option value="USD">USD - Dollar</option>
+              </select>
+            </div>
+            <div class="calc-field">
+              <label for="rooms">Hotel rooms</label>
+              <input id="rooms" type="number" min="1" step="1" inputmode="numeric">
+            </div>
+            <div class="calc-field">
+              <label for="days">Days in period</label>
+              <input id="days" type="number" min="1" max="366" step="1" inputmode="numeric">
+            </div>
+            <div class="calc-field">
+              <label for="targetOccupancy">Target occupancy</label>
+              <div class="input-wrap has-suffix"><input id="targetOccupancy" type="number" min="0" max="100" step=".1"><span class="suffix">%</span></div>
+            </div>
+            <div class="calc-field">
+              <label for="adr">Average room rate <small>net room revenue</small></label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="adr" type="number" min="0" step=".01"></div>
+            </div>
+            <div class="calc-field">
+              <label for="otherRevenue">Other revenue / occupied room <small>optional</small></label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="otherRevenue" type="number" min="0" step=".01"></div>
+            </div>
+          </div>
+          <p class="calc-helper">Use accommodation revenue excluding VAT/sales tax where possible. Other revenue can represent expected contribution from breakfast, parking or ancillary hotel spend if it rises with occupied rooms.</p>
+        </div>
+
+        <div class="calc-panel">
+          <div class="calc-panel-heading"><h2>Fixed operating costs</h2><span>Per selected period</span></div>
+          <div class="calc-field-grid">
+            <div class="calc-field">
+              <label for="payroll">Fixed payroll</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="payroll" type="number" min="0" step="1"></div>
+            </div>
+            <div class="calc-field">
+              <label for="rent">Rent / lease / mortgage</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="rent" type="number" min="0" step="1"></div>
+            </div>
+            <div class="calc-field">
+              <label for="fixedUtilities">Base utilities</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="fixedUtilities" type="number" min="0" step="1"></div>
+            </div>
+            <div class="calc-field">
+              <label for="software">PMS / software / IT</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="software" type="number" min="0" step="1"></div>
+            </div>
+            <div class="calc-field">
+              <label for="insuranceTaxes">Insurance / property taxes</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="insuranceTaxes" type="number" min="0" step="1"></div>
+            </div>
+            <div class="calc-field">
+              <label for="marketing">Sales & marketing</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="marketing" type="number" min="0" step="1"></div>
+            </div>
+            <div class="calc-field">
+              <label for="maintenance">Maintenance contracts</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="maintenance" type="number" min="0" step="1"></div>
+            </div>
+            <div class="calc-field">
+              <label for="admin">Admin / accounting</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="admin" type="number" min="0" step="1"></div>
+            </div>
+            <div class="calc-field full">
+              <label for="otherFixed">Other fixed costs</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="otherFixed" type="number" min="0" step="1"></div>
+            </div>
+          </div>
+          <p class="calc-helper">Fixed costs are costs the hotel still carries even at very low occupancy. Utilities are often semi-variable, so this calculator separates the base amount here from occupancy-related consumption below.</p>
+        </div>
+
+        <div class="calc-panel">
+          <div class="calc-panel-heading"><h2>Variable cost per occupied room</h2><span>Incremental costs</span></div>
+          <div class="calc-field-grid">
+            <div class="calc-field">
+              <label for="housekeeping">Housekeeping</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="housekeeping" type="number" min="0" step=".01"></div>
+            </div>
+            <div class="calc-field">
+              <label for="laundry">Laundry / linen</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="laundry" type="number" min="0" step=".01"></div>
+            </div>
+            <div class="calc-field">
+              <label for="amenities">Guest amenities</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="amenities" type="number" min="0" step=".01"></div>
+            </div>
+            <div class="calc-field">
+              <label for="variableUtilities">Variable utilities</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="variableUtilities" type="number" min="0" step=".01"></div>
+            </div>
+            <div class="calc-field">
+              <label for="breakfast">Included breakfast / F&B</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="breakfast" type="number" min="0" step=".01"></div>
+            </div>
+            <div class="calc-field">
+              <label for="otherVariable">Other variable cost</label>
+              <div class="input-wrap has-prefix"><span class="prefix" data-currency-symbol>€</span><input id="otherVariable" type="number" min="0" step=".01"></div>
+            </div>
+            <div class="calc-field full">
+              <label for="commission">Average commission & payment cost <small>% of room revenue</small></label>
+              <div class="input-wrap has-suffix"><input id="commission" type="number" min="0" max="99" step=".1"><span class="suffix">%</span></div>
+            </div>
+          </div>
+          <p class="calc-helper">Commission is modelled as a percentage of room revenue because OTA and payment costs usually scale with selling price. Use a blended average if your hotel has a mix of direct and third-party bookings.</p>
+        </div>
+
+        <div class="calc-actions">
+          <button type="button" class="primary" id="copySummary">Copy summary</button>
+          <button type="button" id="printCalc">Print / save PDF</button>
+          <button type="button" id="resetCalc">Reset example</button>
+        </div>
+      </form>
+
+      <div class="calc-results" aria-live="polite">
+        <section class="result-panel result-hero">
+          <div class="result-hero-top">
+            <div>
+              <span class="result-label">Break-even occupancy</span>
+              <strong class="result-big" id="beOccupancy">—</strong>
+            </div>
+            <span class="result-status" id="beStatus">Calculating</span>
+          </div>
+          <div class="result-main-grid">
+            <div class="result-mini"><span>Occupied room nights</span><strong id="beRooms">—</strong></div>
+            <div class="result-mini"><span>Rooms / day</span><strong id="beRoomsPerDay">—</strong></div>
+            <div class="result-mini"><span>Revenue at break-even</span><strong id="beRevenue">—</strong></div>
+            <div class="result-mini"><span>Contribution / room</span><strong id="contributionRoom">—</strong></div>
+          </div>
+        </section>
+
+        <section class="result-panel">
+          <div class="result-heading">
+            <h2>Your target scenario</h2>
+            <span id="targetOccupancyDisplay">—</span>
+          </div>
+          <div class="insight-grid">
+            <div class="insight-card"><span>Operating result</span><strong id="targetProfit">—</strong><small>Revenue minus modelled operating costs.</small></div>
+            <div class="insight-card"><span>Total revenue</span><strong id="targetRevenue">—</strong><small>Room plus ancillary revenue.</small></div>
+            <div class="insight-card"><span>Total costs</span><strong id="targetCosts">—</strong><small>Fixed plus variable and commission.</small></div>
+            <div class="insight-card"><span>ADR required</span><strong id="neededAdr">—</strong><small>ADR needed to break even at your target occupancy.</small></div>
+            <div class="insight-card"><span>RevPAR</span><strong id="currentRevpar">—</strong><small>Room revenue per available room.</small></div>
+            <div class="insight-card"><span>Operating margin</span><strong id="gopMargin">—</strong><small>Modelled operating result as a share of revenue.</small></div>
+          </div>
+          <div style="display:none"><span id="targetOccupied"></span><span id="currentTrevpar"></span><span id="fixedCostTotal"></span><span id="variableRoomTotal"></span></div>
+        </section>
+
+        <section class="result-panel">
+          <div class="result-heading">
+            <h2>Revenue vs cost curve</h2>
+            <span>0% - 100% occupancy</span>
+          </div>
+          <div class="chart-wrap"><canvas id="breakEvenChart" width="800" height="350" aria-label="Revenue and cost by hotel occupancy"></canvas></div>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-line revenue"></span>Revenue</span>
+            <span class="legend-item"><span class="legend-line cost"></span>Total cost</span>
+            <span class="legend-item"><span class="legend-line"></span>Break-even marker</span>
+          </div>
+        </section>
+
+        <section class="result-panel">
+          <div class="result-heading"><h2>Occupancy scenarios</h2><span>Same ADR & cost assumptions</span></div>
+          <div class="scenario-scroll">
+            <table class="scenario-table">
+              <thead><tr><th>Occupancy</th><th>Room nights</th><th>Room revenue</th><th>Total cost</th><th>Result</th><th>RevPAR</th></tr></thead>
+              <tbody id="scenarioBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="result-panel">
+          <div class="result-heading"><h2>Cost structure at target</h2><span>Modelled mix</span></div>
+          <div class="cost-bars" id="costMix"></div>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-white">
+    <div class="explainer-grid">
+      <div><span class="eyebrow">How to read it</span><h2>A break-even figure is only useful when the costs behind it are realistic.</h2></div>
+      <div class="explainer-copy">
+        <p>The calculator treats hotel costs in three practical layers: fixed operating costs, variable cost per occupied room, and percentage-based distribution/payment costs.</p>
+        <ul>
+          <li><strong>Fixed costs</strong> continue even when occupancy is low - salaried payroll, rent, software, insurance and the base load of utilities.</li>
+          <li><strong>Variable room costs</strong> rise when a room is occupied - housekeeping, laundry, amenities, additional utilities and included breakfast.</li>
+          <li><strong>Commission costs</strong> rise with the room rate, which is why they are calculated as a percentage of room revenue rather than a flat amount per occupied room.</li>
+        </ul>
+        <p>The core break-even formula is: fixed costs divided by contribution per occupied room. Contribution per room is ADR after the modelled commission, plus ancillary revenue, minus the variable room cost.</p>
+        <p><strong>Important:</strong> this is a management planning model, not accounting or tax advice. Hotels with large F&B, spa, events, lease structures or highly variable labour may need a more detailed departmental model.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="brand brand-footer" href="index.html" aria-label="Plutus Hotel Revenue home">
+        <img src="logo/plutus-mark.svg" alt="" class="brand-mark">
+        <span class="brand-copy"><strong>PLUTUS</strong><span>HOTEL REVENUE</span></span>
+      </a>
+      <p>Straightforward revenue management for hotels that want stronger performance without unnecessary complexity.</p>
+      <div class="footer-socials">
+        <a href="https://www.linkedin.com/company/plutushotelrevenue/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="https://www.facebook.com/plutushotelrevenue/" target="_blank" rel="noopener noreferrer">Facebook</a>
+      </div>
+    </div>
+
+    <div class="footer-column">
+      <h2>Company</h2>
+      <a href="about.html">About</a>
+      <a href="revenue_management.html">Revenue management</a>
+      <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="footer-column">
+      <h2>Resources</h2>
+      <a href="break_even_calculator.html">Break-even calculator</a>
+      <a href="tips.html">Tips & insights</a>
+      <a href="software.html">Hotel software</a>
+      <a href="blog.html">Blog</a>
+    </div>
+
+    <div class="footer-column">
+      <h2>Legal</h2>
+      <a href="privacy_policy.html">Privacy policy</a>
+      <a href="terms_and_conditions.html">Terms</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>&copy; <span data-year></span> Plutus Hotel Revenue</span>
+    <span>Barcelona, Spain - working with hotels across markets.</span>
+  </div>
+</footer>
+
+<script src="navigation.js?v=20260903-redesign"></script>
+<script src="calculator.js?v=20260903"></script>
+</body>
+</html>
